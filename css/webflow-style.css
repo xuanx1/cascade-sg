@@ -2569,7 +2569,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
   }
   #clocks-widget {
     display: none !important;
@@ -2581,11 +2581,15 @@ body {
     grid-column: 1 / 2;
     text-align: center;
     order: 2;
+    font-size: 11px;
+    margin-top: 0;
+    margin-bottom: 0;
   }
   #w-node-b4bed388d8a5 {
     grid-column: 1 / 2;
     text-align: center;
     order: 1;
+    font-size: 16px;
   }
 }
 
@@ -2801,7 +2805,7 @@ body {
   .wrapper {
     overflow: hidden !important;
     width: 100vw !important;
-    height: 100vh !important;
+    height: calc(100vh - 70px) !important;
   }
 
   .flex {
@@ -2809,7 +2813,7 @@ body {
     grid-template-columns: 1fr 1fr !important;
     grid-template-rows: 1fr 1fr 1fr !important;
     width: 100vw !important;
-    height: 100vh !important;
+    height: calc(100vh - 70px) !important;
     flex-direction: unset !important;
   }
 

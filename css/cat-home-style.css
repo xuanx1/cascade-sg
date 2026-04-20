@@ -3054,11 +3054,13 @@ figcaption {
 }
 
 .absolute-img {
-  object-fit: cover;
+  object-fit: contain;
   width: 100%;
-  height: 100%;
-  position: absolute;
-  inset: 0%;
+  height: auto;
+  display: block;
+  position: relative;
+  inset: auto;
+  border-radius: 2rem;
 }
 
 .huge-card__flex {
@@ -3216,15 +3218,23 @@ figcaption {
   position: absolute;
   inset: 0%;
   will-change: transform;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.thumbnail-project.is-loaded {
+  opacity: 1;
 }
 
 .tag {
   padding: var(--padding--pd-02) var(--padding--pd-04);
-  background-color: var(--color--c2);
+  background-color: #fff;
+  color: #000;
   border-radius: 4rem;
   display: inline-flex;
   position: relative;
   z-index: 1;
+  transition: background-color 1.2s ease, color 1.2s ease;
 }
 
 .tag.c1-04 {
@@ -3315,20 +3325,15 @@ figcaption {
 }
 
 .hero__content {
-  padding: var(--padding--pd-06);
   grid-column-gap: 1.5rem;
   grid-row-gap: 1.5rem;
-  background-color: var(--color--c1-04);
-  border-radius: 2rem;
   flex-flow: column;
   justify-content: space-between;
   align-items: stretch;
   width: 100%;
-  height: 54vw;
-  max-height: 43rem;
+  height: auto;
   display: flex;
   position: relative;
-  overflow: hidden;
 }
 
 .sectors__list {
@@ -4004,7 +4009,7 @@ figcaption {
   }
 
   .hero__content {
-    height: 100vw;
+    height: auto;
     max-height: none;
   }
 
@@ -4528,7 +4533,7 @@ figcaption {
   }
 
   .hero__content {
-    height: 130vw;
+    height: auto;
   }
 
   .jobs__item {
