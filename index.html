@@ -60,6 +60,10 @@
       .brand-logo:hover {
         filter: brightness(1);
       }
+      @media (max-width: 768px) {
+        .brand-text { display: none; }
+        .brand-logo, .brand-logo:hover { filter: brightness(0.45); }
+      }
     </style>
 
     <script type="text/javascript">
@@ -257,7 +261,7 @@ body:hover .cursor,
             class="brand-logo"
             style="height: 4rem; width: auto;"
           />
-          <span style="margin-left:1rem; font-size:1.3rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase;">CASCADE</span>
+          <span class="brand-text" style="margin-left:1rem; font-size:1.3rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase;">CASCADE</span>
         </a>
 
 
