@@ -29,6 +29,68 @@
 
     </script>
 
+    <style>
+      .playbook-switcher {
+        display: grid;
+        gap: 1.5rem;
+      }
+      .playbook-switcher__frame {
+        position: relative;
+        overflow: hidden;
+        border-radius: 2rem;
+        aspect-ratio: 16 / 9;
+      }
+      .playbook-switcher__frame img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        z-index: 1;
+      }
+      .playbook-switcher__frame img.active {
+        opacity: 1;
+        transform: translateX(0);
+        z-index: 2;
+      }
+      .playbook-switcher__frame img.prev {
+        opacity: 0;
+        transform: translateX(-100%);
+      }
+      .playbook-switcher__frame img.next {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+      .playbook-switcher__controls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+      }
+      .playbook-switcher__button {
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        background: rgba(0, 0, 0, 0.35);
+        color: #ffffff;
+        padding: 0.75rem 1.25rem;
+        border-radius: 999px;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      }
+      .playbook-switcher__button.active {
+        background: #ffffff;
+        color: #000000;
+        border-color: #ffffff;
+      }
+      .playbook-switcher__button:focus {
+        outline: 2px solid #ffffff;
+        outline-offset: 3px;
+      }
+    </style>
+
   </head>
 
   <body>
@@ -146,15 +208,18 @@
 
               <div class="project__info-content">
 
-                <img src="images/st-npe.gif" loading="lazy" alt="ST Business Playbook – NPE" class="project-image" />
-
-                <div class="spacer-regular"></div>
-
-                <img src="images/st-def.gif" loading="lazy" alt="ST Business Playbook – Defence" class="project-image" />
-
-                <div class="spacer-regular"></div>
-
-                <img src="images/st-energy.gif" loading="lazy" alt="ST Business Playbook – Energy" class="project-image" />
+                <div class="playbook-switcher">
+                  <div class="playbook-switcher__frame">
+                    <img src="images/st-npe.gif" loading="lazy" alt="ST Business Playbook – NPE" class="playbook-switcher__image active" data-index="0" />
+                    <img src="images/st-def.gif" loading="lazy" alt="ST Business Playbook – Defence" class="playbook-switcher__image" data-index="1" />
+                    <img src="images/st-energy.gif" loading="lazy" alt="ST Business Playbook – Energy" class="playbook-switcher__image" data-index="2" />
+                  </div>
+                  <div class="playbook-switcher__controls">
+                    <button type="button" class="playbook-switcher__button active" data-index="0">NPE</button>
+                    <button type="button" class="playbook-switcher__button" data-index="1">Defence</button>
+                    <button type="button" class="playbook-switcher__button" data-index="2">Energy</button>
+                  </div>
+                </div>
 
               </div>
 
@@ -296,7 +361,48 @@
 
   </script>
 
+  <script>
 
+    (function() {
+      var switcher = document.querySelector('.playbook-switcher');
+      if (!switcher) return;
+      var buttons = Array.prototype.slice.call(switcher.querySelectorAll('.playbook-switcher__button'));
+      var images = Array.prototype.slice.call(switcher.querySelectorAll('.playbook-switcher__image'));
+
+      var currentIndex = 0;
+      function setActive(index) {
+        var target = Number(index);
+        var direction = target >= currentIndex ? 'next' : 'prev';
+        buttons.forEach(function(button) {
+          var isActive = Number(button.dataset.index) === target;
+          button.classList.toggle('active', isActive);
+          button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+        images.forEach(function(image) {
+          var imageIndex = Number(image.dataset.index);
+          if (imageIndex === target) {
+            image.classList.add('active');
+            image.classList.remove('prev', 'next');
+          } else if (imageIndex === currentIndex) {
+            image.classList.remove('active');
+            image.classList.add(direction);
+          } else {
+            image.classList.remove('active', 'prev', 'next');
+          }
+        });
+        currentIndex = target;
+      }
+
+      buttons.forEach(function(button) {
+        button.addEventListener('click', function() {
+          setActive(button.dataset.index);
+        });
+      });
+
+      setActive(0);
+    })();
+
+  </script>
 
   <script src="../js/page-transitions.js"></script>
 

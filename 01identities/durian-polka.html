@@ -29,6 +29,114 @@
 
     </script>
 
+    <style>
+      .before-after {
+        position: relative;
+        overflow: hidden;
+        border-radius: 1rem;
+        touch-action: none;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+      }
+      .before-after img {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        object-position: left center;
+      }
+      .before-after__overlay {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        clip-path: inset(0 calc(100% - 50%) 0 0);
+      }
+      .before-after__overlay img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: left center;
+      }
+      .before-after__handle {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 3rem;
+        height: 100%;
+        padding: 0;
+        border: none;
+        background: transparent;
+        cursor: ew-resize;
+        touch-action: none;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .before-after__handle:focus {
+        outline: 2px solid #ffffff;
+        outline-offset: 4px;
+      }
+      .before-after__handle span {
+        position: relative;
+        display: block;
+        width: 2px;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 1px;
+      }
+      .before-after__handle span::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 1.2rem;
+        height: 1.2rem;
+        border-radius: 50%;
+        background: #ffffff;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        transform: translate(-50%, -50%);
+      }
+      .before-after__labels {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 1rem;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 1rem;
+        gap: 1rem;
+        pointer-events: none;
+        color: #ffffff;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+      }
+      .before-after__label {
+        background: rgba(0, 0, 0, 0.45);
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+      }
+      .before-after__label.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+      @media (max-width: 768px) {
+        .before-after__labels {
+          padding: 0 0.75rem;
+          font-size: 0.8rem;
+        }
+        .before-after__handle span {
+          width: 1.2rem;
+          height: 1.2rem;
+        }
+      }
+    </style>
+
   </head>
 
   <body>
@@ -85,11 +193,29 @@
 
                 </div>
 
-                <div class="project__title">
+                <div class="project__title" style="position:relative;">
 
                   <h1 class="heading-huge">Durian Mooncake Collection</h1>
 
+                  <img src="images/durian.webp" loading="lazy" alt="Durian motif detail" class="durian-hover-img" style="position:absolute;top:0rem;left:-8.5rem;width:120px;height:auto;animation:durianFloat 4s ease-in-out infinite;pointer-events:none;z-index:2;" />
+
                 </div>
+
+                <style>
+                  @keyframes durianFloat {
+                    0%, 100% { transform: translateY(0) rotate(0deg); }
+                    25% { transform: translateY(-12px) rotate(5deg); }
+                    50% { transform: translateY(-6px) rotate(-3deg); }
+                    75% { transform: translateY(-14px) rotate(4deg); }
+                  }
+                  @media (max-width: 768px) {
+                    .durian-hover-img {
+                      width: 80px !important;
+                      right: -2rem !important;
+                      top: -1.5rem !important;
+                    }
+                  }
+                </style>
 
                 <div class="project__overview">
 
@@ -146,27 +272,19 @@
 
               <div class="project__info-content">
 
-                <img src="images/durian-polka-sketch.webp" loading="lazy" alt="Durian Mooncake Collection — sketch" class="project-image" />
-
+              <div class="before-after">
+                <img src="images/durian-polka.webp" loading="lazy" alt="Durian Mooncake Collection — polka pattern" class="project-image" />
+                <div class="before-after__overlay">
+                  <img src="images/durian-polka-sketch.webp" loading="lazy" alt="Durian Mooncake Collection — sketch overlay" class="project-image" />
+                </div>
+                <button type="button" class="before-after__handle" aria-label="Slide to compare before and after">
+                  <span></span>
+                </button>
+                <div class="before-after__labels">
+                  <span class="before-after__label">Concept</span>
+                  <span class="before-after__label">Prototype</span>
+                </div>
               </div>
-
-            </div>
-
-          </div>
-
-        </section>
-
-        <div class="spacer-regular"></div>
-
-        <section class="project__info">
-
-          <div class="container">
-
-            <div class="max-width-regular">
-
-              <div class="project__info-content">
-
-                <img src="images/durian.webp" loading="lazy" alt="Durian motif detail" class="project-image" />
 
               </div>
 
@@ -308,6 +426,69 @@
 
 
 
+  <script>
+    (function() {
+      var widgets = document.querySelectorAll('.before-after');
+      if (!widgets.length) return;
+      widgets.forEach(function(widget) {
+        var overlay = widget.querySelector('.before-after__overlay');
+        var handle = widget.querySelector('.before-after__handle');
+        var rect = widget.getBoundingClientRect();
+        var conceptLabel = widget.querySelector('.before-after__label:first-child');
+        var prototypeLabel = widget.querySelector('.before-after__label:last-child');
+        function setPosition(clientX) {
+          rect = widget.getBoundingClientRect();
+          var x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+          var percent = (x / rect.width) * 100;
+          overlay.style.clipPath = 'inset(0 calc(100% - ' + percent + '%) 0 0)';
+          handle.style.left = percent + '%';
+          if (conceptLabel) {
+            conceptLabel.classList.toggle('hidden', percent < 50);
+          }
+          if (prototypeLabel) {
+            prototypeLabel.classList.toggle('hidden', percent > 50);
+          }
+        }
+        function onPointerMove(e) {
+          setPosition(e.clientX);
+        }
+        function onPointerDown(e) {
+          e.preventDefault();
+          if (handle.setPointerCapture) {
+            handle.setPointerCapture(e.pointerId);
+          }
+          setPosition(e.clientX);
+          document.addEventListener('pointermove', onPointerMove);
+          document.addEventListener('pointerup', onPointerUp);
+          document.addEventListener('pointercancel', onPointerUp);
+        }
+        function onPointerUp() {
+          document.removeEventListener('pointermove', onPointerMove);
+          document.removeEventListener('pointerup', onPointerUp);
+          document.removeEventListener('pointercancel', onPointerUp);
+        }
+        handle.addEventListener('pointerdown', onPointerDown);
+        widget.addEventListener('pointerdown', function(e) {
+          if (e.target !== handle) {
+            e.preventDefault();
+            setPosition(e.clientX);
+            document.addEventListener('pointermove', onPointerMove);
+            document.addEventListener('pointerup', onPointerUp);
+            document.addEventListener('pointercancel', onPointerUp);
+          }
+        });
+        widget.addEventListener('click', function(e) {
+          if (e.target !== handle) {
+            setPosition(e.clientX);
+          }
+        });
+        setPosition(rect.left + rect.width / 2);
+        window.addEventListener('resize', function() {
+          setPosition(widget.getBoundingClientRect().left + widget.getBoundingClientRect().width / 2);
+        });
+      });
+    })();
+  </script>
   <script src="../js/page-transitions.js"></script>
 
 </body>

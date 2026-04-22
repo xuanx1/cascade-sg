@@ -153,7 +153,7 @@
 
 // Magnifying glass lens on .project-image hover
 (function () {
-  var images = document.querySelectorAll('.project-image');
+  var images = document.querySelectorAll('.project-image, .before-after__overlay img');
   if (!images.length) return;
 
   var RADIUS = 75;
