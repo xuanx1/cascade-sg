@@ -4643,7 +4643,7 @@ figcaption {
   }
 
   .project-image {
-    height: 100vw;
+    height: auto;
   }
 
   .nav__link {
