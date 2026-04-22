@@ -13,6 +13,27 @@
   src: url('../fonts/montserrat-italic.woff2') format('woff2');
 }
 @font-face {
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/bebasneue-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Bodoni Moda';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/bodonimoda-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Great Vibes';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/greatvibes-normal.woff2') format('woff2');
+}
+@font-face {
   font-family: 'Circular';
   src: url('../fonts/circularstd-book.otf') format('opentype');
   font-weight: 400;
@@ -3009,6 +3030,45 @@ figcaption {
   overflow: hidden;
 }
 
+.footer__nav-link::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  padding: 0.45rem 0.95rem;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0082f3;
+  background: #fff;
+  border: 1px solid #0082f3;
+  border-radius: 999px;
+  white-space: nowrap;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 20;
+}
+
+.footer__nav-link[href*="01identities"]::before { content: "Marks, brands, and visual languages."; }
+.footer__nav-link[href*="02spatial"]::before    { content: "Spaces that guide movement."; }
+.footer__nav-link[href*="03industrial"]::before { content: "Objects with intent."; }
+.footer__nav-link[href*="04datavis"]::before    { content: "Numbers made visible."; }
+.footer__nav-link[href*="05intangible"]::before { content: "Ideas without edges."; }
+
+.footer__nav-link:hover {
+  overflow: visible;
+}
+
+.footer__nav-link:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 .footer__nav-link::after {
   content: '';
   position: absolute;
@@ -4306,7 +4366,15 @@ figcaption {
     padding-bottom: var(--padding--pd-04);
     grid-column-gap: 1rem;
     grid-row-gap: 1rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 14px;
+    line-height: 20px;
   }
+  .footer__legal > div:first-child { order: 2; }
+  .footer__legal > div:last-child { order: 1; }
 
   .footer__contact {
     grid-row-gap: 1.5rem;

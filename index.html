@@ -64,6 +64,36 @@
         .brand-text { display: none; }
         .brand-logo, .brand-logo:hover { filter: brightness(0.45); }
         .brand.w-nav-brand { padding-left: 10px !important; }
+        #w-node-b4bed388d8a5 { display: none !important; }
+      }
+      .say-hello-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 0.55rem 1.1rem;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #0082f3;
+        border: 1px solid #0082f3;
+        border-radius: 999px;
+        text-decoration: none;
+        background: transparent;
+        transition: background 0.2s ease, color 0.2s ease;
+        z-index: 100;
+      }
+      .say-hello-btn:hover {
+        background: #0082f3;
+        color: #fff;
+      }
+      @media (max-width: 768px) {
+        .say-hello-btn {
+          top: 28px;
+          right: 12px;
+          padding: 0.4rem 0.85rem;
+          font-size: 0.75rem;
+        }
       }
     </style>
 
@@ -213,16 +243,8 @@ body:hover .cursor,
           <span><strong>NEW YORK</strong> <span id="time-ny"></span></span>
           <span><strong>MILAN</strong> <span id="time-mi"></span></span>
         </p>
-        <p id="w-node-b4bed388d8a5" class="text-left" style="text-align:right;">
-          Collaborations?
-          <span class="collab-email"><strong
-            ><a
-              id="copy-email"
-              href="#"
-              style="color: inherit; text-decoration: none"
-              onclick="navigator.clipboard.writeText('xuan.t7@proton.me');this.textContent='Copied!';var t=this;setTimeout(function(){t.textContent='xuan.t7@proton.me';},1500);return false;"
-              >xuan.t7@proton.me</a
-            ></strong> / </span><strong><a href="https://wa.me/6596369362" target="_blank" style="color:inherit;text-decoration:none;">+65 9636 9362</a></strong>
+        <p id="w-node-b4bed388d8a5" class="text-medium" style="text-align:right;">
+          Three Cities. <strong>One Cascade.</strong>
         </p>
       </div>
       <script>
@@ -271,8 +293,8 @@ body:hover .cursor,
           id="w-node-5ccc5b71cc34"
           class="nav-menu w-nav-menu"
         >
-          <span class="nav-link w-nav-link hide-mobile" style="cursor:default;color:#0082f3;">Work</span>
         </nav>
+        <a href="contact.html" class="say-hello-btn">Say Hello!</a>
       </div>
     </div>
 
