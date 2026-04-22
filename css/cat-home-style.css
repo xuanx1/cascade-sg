@@ -3354,6 +3354,22 @@ figcaption {
   transform: translateY(-50%);
 }
 
+.asean-annotation-label {
+  font-family: Montserrat, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 0.55rem;
+  letter-spacing: 1px;
+  text-align: left;
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+}
+
+.denom-5 .asean-annotation-label   { color: #6BBFBF; }
+.denom-10 .asean-annotation-label  { color: #E03030; }
+.denom-50 .asean-annotation-label  { color: #B044B0; }
+.denom-100 .asean-annotation-label { color: #4A7FC4; }
+.denom-200 .asean-annotation-label { color: #E8960E; }
+
 .asean-annotation-copy {
   font-size: 0.55rem;
   font-weight: 400;
@@ -4699,6 +4715,63 @@ figcaption {
 
   .nav {
     padding: var(--padding--pd-02) var(--padding--pd-04) var(--padding--pd-04);
+  }
+
+  .asean-denom-gallery {
+    min-height: 0;
+    max-height: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 1rem 0;
+  }
+
+  .asean-denom-item {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none !important;
+    width: 85%;
+    max-width: 85%;
+  }
+
+  .asean-denom-item.denom-5   { left: auto; width: 55%; max-width: 55%; }
+  .asean-denom-item.denom-10  { left: auto; width: 65%; max-width: 65%; }
+  .asean-denom-item.denom-50  { left: auto; width: 75%; max-width: 75%; }
+  .asean-denom-item.denom-100 { left: auto; width: 85%; max-width: 85%; }
+  .asean-denom-item.denom-200 { left: auto; width: 95%; max-width: 95%; }
+
+  .asean-annotation {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
+    width: 12rem !important;
+    margin: 0.5rem 0 0 0 !important;
+    padding: 0.6rem 0.8rem !important;
+    text-align: left;
+    box-sizing: border-box;
+  }
+
+  .asean-denom-item.is-visible .asean-annotation {
+    transform: none !important;
+  }
+
+  .asean-annotation-line,
+  .asean-annotation-pin {
+    display: none;
+  }
+
+  .asean-annotation-label {
+    font-size: 0.75rem;
+  }
+
+  .asean-annotation-copy {
+    font-size: 0.75rem;
   }
 }
 

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Disallow: /loading.html
+
+Sitemap: https://cascade-sg.com/sitemap.xml
