@@ -86,7 +86,63 @@
 
 
 
-                    <div role="listitem" class="projects__item w-dyn-item">
+                    <div role="listitem" class="projects__item w-dyn-item" data-year="2021">
+
+                      <a href="durian-polka.html" class="projects__link w-inline-block">
+
+                        <div class="projects__thumb">
+
+                          <img src="./images/durian-polka.png" loading="eager" alt="Durian Mooncake Collection" class="thumbnail-project" />
+
+                          <div class="tag">
+
+                            <div class="text-small">Pattern &amp; Identity Design</div>
+
+                          </div>
+
+                        </div>
+
+                        <div class="projects__title">
+
+                          <h2 class="heading-medium">Durian Mooncake Collection</h2>
+
+                        </div>
+
+                      </a>
+
+                    </div>
+
+
+
+                    <div role="listitem" class="projects__item w-dyn-item" data-year="2025">
+
+                      <a href="mooncake.html" class="projects__link w-inline-block">
+
+                        <div class="projects__thumb">
+
+                          <img src="./images/mooncake-large.png" loading="eager" alt="Puffs for a King" class="thumbnail-project" />
+
+                          <div class="tag">
+
+                            <div class="text-small">Packaging &amp; Identity Design</div>
+
+                          </div>
+
+                        </div>
+
+                        <div class="projects__title">
+
+                          <h2 class="heading-medium">Puffs for a King</h2>
+
+                        </div>
+
+                      </a>
+
+                    </div>
+
+
+
+                    <div role="listitem" class="projects__item w-dyn-item" data-year="2023">
 
                       <a href="borbone.html" class="projects__link w-inline-block">
 
@@ -114,7 +170,7 @@
 
 
 
-                    <div role="listitem" class="projects__item w-dyn-item">
+                    <div role="listitem" class="projects__item w-dyn-item" data-year="2020">
 
                       <a href="corporate.html" class="projects__link w-inline-block">
 
@@ -142,7 +198,7 @@
 
 
 
-                    <div role="listitem" class="projects__item w-dyn-item">
+                    <div role="listitem" class="projects__item w-dyn-item" data-year="2020">
 
                       <a href="bustling-times.html" class="projects__link w-inline-block">
 
@@ -170,7 +226,7 @@
 
 
 
-                    <div role="listitem" class="projects__item w-dyn-item">
+                    <div role="listitem" class="projects__item w-dyn-item" data-year="2019">
 
                       <a href="bicentennial-sg.html" class="projects__link w-inline-block">
 
@@ -198,7 +254,7 @@
 
 
 
-                    <div role="listitem" class="projects__item w-dyn-item">
+                    <div role="listitem" class="projects__item w-dyn-item" data-year="2019">
 
                       <a href="weis-tcm.html" class="projects__link w-inline-block">
 
@@ -226,7 +282,7 @@
 
 
 
-                    <div role="listitem" class="projects__item w-dyn-item">
+                    <div role="listitem" class="projects__item w-dyn-item" data-year="2019">
 
                       <a href="sg-fintech.html" class="projects__link w-inline-block">
 
@@ -445,6 +501,7 @@
           var progress = (rect.top + rect.height / 2) / winH;
 
           var shift = (progress - 1) * 20;
+          shift = Math.max(Math.min(shift, 15), -15);
 
           img.style.transform = 'translateY(' + shift + '%)';
 
@@ -460,6 +517,7 @@
 
   </script>
 
+<script src="../js/project-sort.js"></script>
 <script src="../js/tag-color.js"></script>
 
 <script src="../js/page-transitions.js"></script>

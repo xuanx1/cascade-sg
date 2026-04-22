@@ -115,7 +115,10 @@
                     <div class="text-large">Currency Design</div>
 
                   </div>
-
+                  <div class="project__overview-item">
+                    <h2 class="heading-small c3">Location</h2>
+                    <div class="text-large">Jakarta, Indonesia</div>
+                  </div>
                 </div>
 
                 <div class="project__intro-text">
@@ -146,23 +149,48 @@
 
                 <div class="spacer-regular"></div>
 
-                <img src="images/banknote_mock_5_asean.png" loading="lazy" alt="ASEAN Banknote – 5 denomination" class="project-image" />
-
-                <div class="spacer-regular"></div>
-
-                <img src="images/banknote_mock_10_asean.png" loading="lazy" alt="ASEAN Banknote – 10 denomination" class="project-image" />
-
-                <div class="spacer-regular"></div>
-
-                <img src="images/banknote_mock_50_asean.png" loading="lazy" alt="ASEAN Banknote – 50 denomination" class="project-image" />
-
-                <div class="spacer-regular"></div>
-
-                <img src="images/banknote_mock_100_asean.png" loading="lazy" alt="ASEAN Banknote – 100 denomination" class="project-image" />
-
-                <div class="spacer-regular"></div>
-
-                <img src="images/banknote_mock_200_asean.png" loading="lazy" alt="ASEAN Banknote – 200 denomination" class="project-image" />
+                <div class="asean-denom-gallery">
+                  <div class="asean-denom-item denom-5" style="--scale:1.92; --x:0%; --top:10%; --base-y:-20%; --parallax:1.8; --annotation-top:38%; --annotation-left:100%;">
+                    <img src="images/banknote_mock_5_asean.png" loading="lazy" alt="ASEAN Banknote – 5 denomination" class="asean-denom-image" />
+                    <div class="asean-annotation">
+                      <span class="asean-annotation-line"></span>
+                      <span class="asean-annotation-pin"></span>
+                      <div class="asean-annotation-copy">5 Thalass highlights ancient empires of both mainland and maritime Southeast Asia.</div>
+                    </div>
+                  </div>
+                  <div class="asean-denom-item denom-10" style="--scale:2.07; --x:15%; --top:46%; --base-y:-8%; --parallax:1.4; --annotation-top:38%; --annotation-left:99%;">
+                    <img src="images/banknote_mock_10_asean.png" loading="lazy" alt="ASEAN Banknote – 10 denomination" class="asean-denom-image" />
+                    <div class="asean-annotation">
+                      <span class="asean-annotation-line"></span>
+                      <span class="asean-annotation-pin"></span>
+                      <div class="asean-annotation-copy">10 Thalass embraces tropical flora and coastal geometry.</div>
+                    </div>
+                  </div>
+                  <div class="asean-denom-item denom-50" style="--scale:2.21; --x:34%; --top:25%; --base-y:4%; --parallax:1.0; --annotation-top:40%; --annotation-left:98%;">
+                    <img src="images/banknote_mock_50_asean.png" loading="lazy" alt="ASEAN Banknote – 50 denomination" class="asean-denom-image" />
+                    <div class="asean-annotation">
+                      <span class="asean-annotation-line"></span>
+                      <span class="asean-annotation-pin"></span>
+                      <div class="asean-annotation-copy">50 Thalass balances bold symmetry with heritage patterning.</div>
+                    </div>
+                  </div>
+                  <div class="asean-denom-item denom-100" style="--scale:2.37; --x:54%; --top:62%; --base-y:12%; --parallax:1.2; --annotation-top:58%; --annotation-right:100%; --annotation-x:-14px; --annotation-line-left:auto; --annotation-line-right:-1.15rem; --annotation-pin-left:auto; --annotation-pin-right:-1.7rem;">
+                    <img src="images/banknote_mock_100_asean.png" loading="lazy" alt="ASEAN Banknote – 100 denomination" class="asean-denom-image" />
+                    <div class="asean-annotation">
+                      <span class="asean-annotation-line"></span>
+                      <span class="asean-annotation-pin"></span>
+                      <div class="asean-annotation-copy">100 Thalass features national landmarks in a contemporary frame.</div>
+                    </div>
+                  </div>
+                  <div class="asean-denom-item denom-200" style="--scale:2.52; --x:72%; --top:85%; --base-y:16%; --parallax:2.1; --annotation-top:58%; --annotation-right:100%; --annotation-x:-14px; --annotation-line-left:auto; --annotation-line-right:-1.15rem; --annotation-pin-left:auto; --annotation-pin-right:-1.7rem;">
+                    <img src="images/banknote_mock_200_asean.png" loading="lazy" alt="ASEAN Banknote – 200 denomination" class="asean-denom-image" />
+                    <div class="asean-annotation">
+                      <span class="asean-annotation-line"></span>
+                      <span class="asean-annotation-pin"></span>
+                      <div class="asean-annotation-copy">200 Thalass combines premium finishes with aspirational iconography.</div>
+                    </div>
+                  </div>
+                </div>
 
               </div>
 
@@ -300,6 +328,38 @@
 
       });
 
+    })();
+
+    (function() {
+      var items = document.querySelectorAll('.asean-denom-item');
+      if (!items.length) return;
+
+      function updateParallax() {
+        var winH = window.innerHeight;
+        items.forEach(function(item) {
+          var rect = item.getBoundingClientRect();
+          var center = rect.top + rect.height / 2;
+          var progress = Math.max(0, Math.min(1, center / winH));
+          var parallax = parseFloat(getComputedStyle(item).getPropertyValue('--parallax')) || 1;
+          var offset = (progress - 0.5) * 38 * parallax;
+          offset = Math.max(-34, Math.min(34, offset));
+          item.style.setProperty('--y', offset + '%');
+        });
+      }
+
+      window.addEventListener('scroll', updateParallax, { passive: true });
+      window.addEventListener('resize', updateParallax);
+      updateParallax();
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          entry.target.classList.toggle('is-visible', entry.isIntersecting);
+        });
+      }, { threshold: 0.35 });
+
+      items.forEach(function(item) {
+        observer.observe(item);
+      });
     })();
 
   </script>

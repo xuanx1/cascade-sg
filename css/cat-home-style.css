@@ -3274,9 +3274,10 @@ figcaption {
 .thumbnail-project {
   object-fit: cover;
   width: 100%;
-  height: 120%;
+  height: 140%;
   position: absolute;
-  inset: 0%;
+  top: 0;
+  left: 0;
   will-change: transform;
   opacity: 0;
   transition: opacity 0.8s ease;
@@ -3284,6 +3285,121 @@ figcaption {
 
 .thumbnail-project.is-loaded {
   opacity: 1;
+}
+
+.asean-denom-gallery {
+  position: relative;
+  width: 100%;
+  min-height: 100rem;
+  max-height: 120rem;
+  margin: 0 auto;
+  overflow: visible;
+  padding: 2rem 0;
+}
+
+.asean-denom-item {
+  position: absolute;
+  top: var(--top, 50%);
+  left: var(--x, auto);
+  transform: translateY(calc(-50% + var(--base-y, 0%) + var(--y, 0%))) scale(var(--scale, 1));
+  transition: transform 0.2s ease-out;
+  width: 18rem;
+  max-width: 18rem;
+  z-index: 1;
+  overflow: visible;
+}
+
+.asean-annotation {
+  position: absolute;
+  top: var(--annotation-top, 50%);
+  left: var(--annotation-left, auto);
+  right: var(--annotation-right, auto);
+  width: 12rem;
+  transform: translateY(-50%) translateX(var(--annotation-x, 14px));
+  opacity: 0;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  pointer-events: none;
+  color: #111;
+  background: rgba(255,255,255,0.92);
+  border-radius: 1.25rem;
+  padding: 1rem 1rem 1rem 1.5rem;
+  box-shadow: 0 28px 60px rgba(0,0,0,0.12);
+}
+
+.asean-denom-item.is-visible .asean-annotation {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.asean-annotation-line {
+  position: absolute;
+  top: 50%;
+  left: var(--annotation-line-left, -1.15rem);
+  right: var(--annotation-line-right, auto);
+  width: 1rem;
+  height: 2px;
+  background: rgba(0,0,0,0.55);
+  transform: translateY(-50%);
+}
+
+.asean-annotation-pin {
+  position: absolute;
+  top: 50%;
+  left: var(--annotation-pin-left, -1.7rem);
+  right: var(--annotation-pin-right, auto);
+  width: 0.8rem;
+  height: 0.8rem;
+  background: rgba(0,0,0,0.8);
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.asean-annotation-copy {
+  font-size: 0.55rem;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: 0;
+  color: #adb1b7;
+}
+
+.asean-denom-item.denom-5 {
+  left: 4%;
+  z-index: 1;
+}
+
+.asean-denom-item.denom-10 {
+  left: 18%;
+  z-index: 2;
+}
+
+.asean-denom-item.denom-50 {
+  left: 34%;
+  z-index: 3;
+}
+
+.asean-denom-item.denom-100 {
+  left: 52%;
+  z-index: 4;
+}
+
+.asean-denom-item.denom-200 {
+  left: 70%;
+  z-index: 5;
+}
+
+.asean-denom-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(0,0,0,0.02) 100%);
+  pointer-events: none;
+}
+
+.asean-denom-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 0.8;
 }
 
 .tag {
