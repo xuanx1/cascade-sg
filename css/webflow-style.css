@@ -2113,7 +2113,7 @@ body {
   width: 55vw;
   height: 70vh;
   border-radius: 12px;
-  background-image: url("../images/col-bg-default.jpg");
+  background-image: url("../images/col-bg-default.webp");
   background-position: 50% 50%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -2126,7 +2126,7 @@ body {
 .image-holder.img-2 {
   top: 45%;
   height: 70vh;
-  background-image: url("../images/hover-spatial.jpg");
+  background-image: url("../images/hover-spatial.webp");
   background-position: 50% 50%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -2136,24 +2136,24 @@ body {
 /* industrial */
 .image-holder.img-3 {
   top: 45%;
-  background-image: url("../images/hover-industrial.jpg");
+  background-image: url("../images/hover-industrial.webp");
   filter: brightness(1);
 }
 
 .image-holder.img-1 {
   top: 45%;
-  background-image: url("../images/hover-identities.jpg");
+  background-image: url("../images/hover-identities.webp");
   filter: brightness(1);
 }
 
 .image-holder.img-5 {
   top: 45%;
-  background-image: url("../images/hover-datavis.jpg");
+  background-image: url("../images/hover-datavis.webp");
 }
 
 .image-holder.img-6 {
   top: 45%;
-  background-image: url("../images/hover-intangibles.jpg");
+  background-image: url("../images/hover-intangibles.webp");
 }
 
 .col-title {
@@ -2432,7 +2432,7 @@ body {
   width: 55vw;
   height: 70vh;
   border-radius: 12px;
-  background-image: url("../images/col-bg-default.jpg");
+  background-image: url("../images/col-bg-default.webp");
   background-position: 50% 50%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -2451,12 +2451,12 @@ body {
 
 .screen-multiply.img-3 {
   top: 45%;
-  background-image: url("../images/col-bg-2.jpg");
+  background-image: url("../images/col-bg-2.webp");
 }
 
 .screen-multiply.img-4 {
   top: 45%;
-  background-image: url("../images/col-bg-3.jpg");
+  background-image: url("../images/col-bg-3.webp");
 }
 
 .screen-multiply.img-1 {
