@@ -30,7 +30,7 @@
         <section class="hero">
           <div class="container">
             <div class="hero__content">
-              <img src="images/final-cover.png" loading="lazy" alt="Trains, Lanes, and Data Grains" class="absolute-img" />
+              <img src="images/final-cover.webp" loading="lazy" alt="Trains, Lanes, and Data Grains" class="absolute-img" />
             </div>
           </div>
         </section>
@@ -57,13 +57,20 @@
                   <div class="project__overview-item">
                     <h2 class="heading-small c3">Medium</h2>
                     <div class="text-large">Interactive GIS Engine</div>
-                  </div>
-                  <div class="project__overview-item">
-                    <h2 class="heading-small c3">Location</h2>
-                    <div class="text-large">New York, USA</div>
-                  </div>
-                </div>
-
+                  </div>
+
+                  <div class="project__overview-item">
+
+                    <h2 class="heading-small c3">Location</h2>
+
+                    <div class="text-large">New York, USA</div>
+
+                  </div>
+
+                </div>
+
+
+
                 <div class="project__intro-text">
                   <p class="text-large">A speculative exploratory urban planning engine built as a MFA thesis project at Parsons School of Design. The tool integrates transit data, land-use records, and demographic layers into a single interactive GIS environment &mdash; enabling users to model hypothetical interventions in Southeast Asian urban infrastructure and visualize their cascading effects on mobility and density.</p>
                 </div>
@@ -77,7 +84,7 @@
             <div class="max-width-regular">
               <div class="project__info-content" style="text-align: center; padding: 4rem 0;">
                 <a href="https://xuanx1.github.io/parsonsThesis-xuan/04final/" target="_blank" class="footer__link w-inline-block" style="font-size: 1.5rem; letter-spacing: 1px;">View Live -></a>
-                <img src="images/final-cover.png" loading="lazy" alt="Trains, Lanes, and Data Grains" class="project-image" style="margin-top: 3rem;" />
+                <img src="images/final-cover.webp" loading="lazy" alt="Trains, Lanes, and Data Grains" class="project-image" style="margin-top: 3rem;" />
               </div>
             </div>
           </div>
@@ -97,11 +104,11 @@
           <div class="footer__content">
             <div class="footer__main">
               <div class="footer__nav">
-                <a href="../01identities/identities-home.html" class="footer__nav-link w-inline-block" data-hover-img="../images/hover-identities.jpg"><div class="text-xlarge">Identities</div></a>
-                <a href="../02spatial/spatial-home.html" class="footer__nav-link w-inline-block" data-hover-img="../images/hover-spatial.jpg"><div class="text-xlarge">Spatial Planning</div></a>
-                <a href="../03industrial/industrial-home.html" class="footer__nav-link w-inline-block" data-hover-img="../images/hover-industrial.jpg"><div class="text-xlarge">Industrial Design</div></a>
-                <a href="../04datavis/datavis-home.html" class="footer__nav-link w-inline-block" data-hover-img="../images/hover-datavis.jpg"><div class="text-xlarge">Data Visualisation</div></a>
-                <a href="../05intangible/intan-home.html" class="footer__nav-link w-inline-block" data-hover-img="../images/hover-intangibles.jpg"><div class="text-xlarge">Intangibles</div></a>
+                <a href="../01identities/identities-home.html" class="footer__nav-link w-inline-block" data-hover-img="../images/hover-identities.webp"><div class="text-xlarge">Identities</div></a>
+                <a href="../02spatial/spatial-home.html" class="footer__nav-link w-inline-block" data-hover-img="../images/hover-spatial.webp"><div class="text-xlarge">Spatial Planning</div></a>
+                <a href="../03industrial/industrial-home.html" class="footer__nav-link w-inline-block" data-hover-img="../images/hover-industrial.webp"><div class="text-xlarge">Industrial Design</div></a>
+                <a href="../04datavis/datavis-home.html" class="footer__nav-link w-inline-block" data-hover-img="../images/hover-datavis.webp"><div class="text-xlarge">Data Visualisation</div></a>
+                <a href="../05intangible/intan-home.html" class="footer__nav-link w-inline-block" data-hover-img="../images/hover-intangibles.webp"><div class="text-xlarge">Intangibles</div></a>
               </div>
                             <div class="footer__legal">
                 <div>CASCADE &copy; <span class="copyright-year">2026</span> &mdash; All rights reserved.</div>
@@ -116,7 +123,7 @@
       if (!container) return;
       var bgImages = [];
       for (var i = 1; i <= 51; i++) {
-        bgImages.push('../bg/sketch png-' + String(i).padStart(2,'0') + '.png');
+        bgImages.push('../bg/sketch png-' + String(i).padStart(2,'0') + '.webp');
       }
       function getRandom(n) { return [...bgImages].sort(function(){return 0.5-Math.random();}).slice(0,n); }
       function show(imgs) {
