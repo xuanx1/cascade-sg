@@ -361,13 +361,15 @@
         imgs.forEach(function(img) {
           var rect = img.parentElement.getBoundingClientRect();
           var winH = window.innerHeight;
-          if (rect.bottom < 0 || rect.top > winH) return;
           var progress = (rect.top + rect.height / 2) / winH;
           var shift = (progress - 1) * 20;
           img.style.transform = 'translateY(' + shift + '%)';
         });
       }
       window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      window.addEventListener('load', update);
+      document.addEventListener('DOMContentLoaded', update);
       update();
     })();
   </script>

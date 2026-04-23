@@ -15,6 +15,17 @@
 
     <link href="../images/favicon/favicon.svg" rel="shortcut icon" type="image/x-icon" />
 
+    <style>
+      .project-slider { position: relative; border-radius: 2rem; overflow: hidden; }
+      .project-slider__base { width: 100%; display: block; }
+      .project-slider__overlay { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; animation: projectSlideFade 6s ease-in-out infinite; }
+      @keyframes projectSlideFade {
+        0%, 40% { opacity: 0; }
+        50%, 90% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+    </style>
+
     <script type="text/javascript">
 
       !(function (o, c) {
@@ -61,7 +72,7 @@
 
             <div class="hero__content">
 
-              <img src="images/borbone-01.webp" loading="lazy" alt="Borbone Product Display" class="absolute-img" />
+              <img src="images/borbone-mercato2.webp" loading="lazy" alt="Borbone Product Display" class="absolute-img" />
 
             </div>
 
@@ -81,7 +92,7 @@
 
                 <div class="project__address">
 
-                  <div class="text-large">Product Photography &amp; Display Design</div>
+                  <div class="text-large">Product Display</div>
 
                 </div>
 
@@ -113,7 +124,7 @@
 
                     <h2 class="heading-small c3">Medium</h2>
 
-                    <div class="text-large">Product Photography &amp; Display Design</div>
+                    <div class="text-large">Product Display</div>
 
                   </div>
                   <div class="project__overview-item">
@@ -146,7 +157,14 @@
 
               <div class="project__info-content">
 
-                <img src="images/borbone-02.webp" loading="lazy" alt="Borbone – detail" class="project-image" />
+                <div class="project-slider">
+                  <img src="images/borbone-02-stacked.webp" loading="lazy" alt="Borbone – stacked" class="project-slider__base" />
+                  <img src="images/borbone-thumb2.webp" loading="lazy" alt="Borbone – alt view" class="project-slider__overlay" />
+                </div>
+        
+                <div class="spacer-large"></div>
+
+                <img src="images/borbone-mercato.webp" loading="lazy" alt="Borbone – detail" class="project-image" />
 
             </div>
 

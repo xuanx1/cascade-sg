@@ -150,7 +150,7 @@
 
                         <div class="projects__thumb">
 
-                          <img src="./images/borbone-01.webp" loading="eager" alt="Borbone" class="thumbnail-project" />
+                          <img src="./images/borbone-thumb2.webp" loading="eager" alt="Borbone" class="thumbnail-project" />
 
                           <div class="tag">
 
@@ -498,8 +498,6 @@
 
           var winH = window.innerHeight;
 
-          if (rect.bottom < 0 || rect.top > winH) return;
-
           var progress = (rect.top + rect.height / 2) / winH;
 
           var shift = (progress - 1) * 20;
@@ -512,6 +510,9 @@
       }
 
       window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      window.addEventListener('load', update);
+      document.addEventListener('DOMContentLoaded', update);
 
       update();
 
