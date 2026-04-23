@@ -146,11 +146,18 @@
 
               <div class="project__info-content">
 
-                <img src="images/0_sg-200-front.webp" loading="lazy" alt="Bicentennial Singapore – banknote front" class="project-image" />
-
-                <div class="spacer-regular"></div>
-
-                <img src="images/0_sg-200-rear.webp" loading="lazy" alt="Bicentennial Singapore – banknote rear" class="project-image" />
+                <div class="note3d" aria-label="Rotatable 3D model of the Bicentennial Singapore $200 banknote. Drag to rotate.">
+                  <div class="note3d__stage">
+                    <div class="note3d__card">
+                      <div class="note3d__face note3d__face--front">
+                        <img src="images/0_sg-200-front.webp" alt="Bicentennial Singapore – banknote front" class="note3d__img" draggable="false" />
+                        <div class="note3d__foil" aria-hidden="true"></div>
+                      </div>
+                      <img src="images/0_sg-200-rear.webp" alt="Bicentennial Singapore – banknote rear" class="note3d__face note3d__face--back" draggable="false" />
+                    </div>
+                  </div>
+                  <div class="note3d__hint">Drag to rotate &middot; Double-click to flip</div>
+                </div>
 
               </div>
 
@@ -159,6 +166,140 @@
           </div>
 
         </section>
+
+        <style>
+          .note3d { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1rem; user-select: none; }
+          .note3d__stage { width: 70%; aspect-ratio: 2.16 / 1; perspective: 1800px; cursor: grab; touch-action: none; }
+          .note3d__stage.is-dragging { cursor: grabbing; }
+          .note3d__card { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transform: rotateY(0deg); transition: transform 0.6s cubic-bezier(.22,.61,.36,1); will-change: transform; }
+          .note3d__card.no-anim { transition: none; }
+          .note3d__face { position: absolute; inset: 0; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; filter: drop-shadow(0 30px 40px rgba(0,0,0,0.25)); pointer-events: none; }
+          .note3d__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+          img.note3d__face { object-fit: contain; }
+          .note3d__face--back { transform: rotateY(180deg); }
+          .note3d__foil {
+            position: absolute;
+            left: 25.2%; top: 14%;
+            width: 13.5%; height: 38%;
+            pointer-events: none;
+            clip-path: polygon(30% 0, 70% 0, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0 70%, 0 30%);
+            background:
+              conic-gradient(from var(--foil-angle, 0deg),
+                hsla(330, 100%, 70%, 0.85),
+                hsla(260, 100%, 70%, 0.85),
+                hsla(190, 100%, 70%, 0.85),
+                hsla(120, 100%, 70%, 0.85),
+                hsla(55, 100%, 70%, 0.85),
+                hsla(15, 100%, 70%, 0.85),
+                hsla(330, 100%, 70%, 0.85));
+            mix-blend-mode: color-dodge;
+            opacity: var(--foil-opacity, 0.55);
+            filter: blur(2px) saturate(1.4);
+            transition: opacity 0.15s linear;
+          }
+          .note3d__foil::after {
+            content: "";
+            position: absolute; inset: 0;
+            background: linear-gradient(var(--foil-sweep, 110deg),
+              transparent 35%,
+              rgba(255,255,255,0.9) 50%,
+              transparent 65%);
+            mix-blend-mode: screen;
+            opacity: var(--foil-sweep-opacity, 0.6);
+          }
+          .note3d__hint { font-family: Montserrat, Arial, sans-serif; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: #0000008a; }
+          @media (max-width: 720px) { .note3d__stage { width: 90%; } }
+        </style>
+
+        <script>
+          (function(){
+            var stage = document.querySelector('.note3d__stage');
+            if(!stage) return;
+            var card = stage.querySelector('.note3d__card');
+            var rotY = 0, rotX = 0;
+            var dragging = false, startX = 0, startY = 0, startRotY = 0, startRotX = 0;
+            var lastMoveTime = 0, lastRotY = 0, velocity = 0;
+            var autoRaf = null;
+
+            function apply(){
+              card.style.transform = 'rotateY(' + rotY + 'deg) rotateX(' + rotX + 'deg)';
+              var rad = rotY * Math.PI / 180;
+              var faceVisible = Math.max(0, Math.cos(rad));
+              var tilt = Math.abs(Math.sin(rad)) + Math.abs(rotX) / 90;
+              var opacity = faceVisible * (0.35 + 0.65 * Math.min(1, tilt * 1.3));
+              var sweepOpacity = faceVisible * Math.min(1, Math.abs(Math.sin(rad * 1.5)) + Math.abs(rotX) / 50);
+              card.style.setProperty('--foil-angle', (rotY * 3) + 'deg');
+              card.style.setProperty('--foil-opacity', opacity.toFixed(3));
+              card.style.setProperty('--foil-sweep', (90 + rotY * 1.5 + rotX * 2) + 'deg');
+              card.style.setProperty('--foil-sweep-opacity', (sweepOpacity * 0.75).toFixed(3));
+            }
+
+            function onDown(e){
+              dragging = true;
+              stage.classList.add('is-dragging');
+              card.classList.add('no-anim');
+              var p = e.touches ? e.touches[0] : e;
+              startX = p.clientX; startY = p.clientY;
+              startRotY = rotY; startRotX = rotX;
+              lastRotY = rotY; lastMoveTime = Date.now(); velocity = 0;
+              stopAuto();
+              if(e.cancelable) e.preventDefault();
+            }
+            function onMove(e){
+              if(!dragging) return;
+              var p = e.touches ? e.touches[0] : e;
+              var dx = p.clientX - startX;
+              var dy = p.clientY - startY;
+              var newRotY = startRotY + dx * 0.5;
+              rotX = Math.max(-25, Math.min(25, startRotX - dy * 0.3));
+              var now = Date.now();
+              var dt = Math.max(1, now - lastMoveTime);
+              velocity = (newRotY - lastRotY) / dt;
+              lastRotY = newRotY; lastMoveTime = now;
+              rotY = newRotY;
+              apply();
+              if(e.cancelable) e.preventDefault();
+            }
+            function onUp(){
+              if(!dragging) return;
+              dragging = false;
+              stage.classList.remove('is-dragging');
+              card.classList.remove('no-anim');
+              if(Math.abs(velocity) > 0.05){
+                rotY += velocity * 180;
+                apply();
+              }
+            }
+
+            stage.addEventListener('mousedown', onDown);
+            window.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup', onUp);
+            stage.addEventListener('touchstart', onDown, {passive:false});
+            window.addEventListener('touchmove', onMove, {passive:false});
+            window.addEventListener('touchend', onUp);
+
+            stage.addEventListener('dblclick', function(){
+              rotY += 180; apply();
+            });
+
+            function autoRotate(){
+              if(dragging) return;
+              rotY += 0.2; apply();
+              autoRaf = requestAnimationFrame(autoRotate);
+            }
+            function stopAuto(){ if(autoRaf){ cancelAnimationFrame(autoRaf); autoRaf = null; } }
+
+            var io = new IntersectionObserver(function(entries){
+              entries.forEach(function(entry){
+                if(entry.isIntersecting && !dragging){ if(!autoRaf) autoRaf = requestAnimationFrame(autoRotate); }
+                else { stopAuto(); }
+              });
+            }, {threshold: 0.25});
+            io.observe(stage);
+
+            apply();
+          })();
+        </script>
 
         <div class="spacer-large"></div>
 
