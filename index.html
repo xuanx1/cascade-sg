@@ -316,98 +316,110 @@ body:hover .cursor,
     ></div>
     <script type="text/javascript">
       document.addEventListener("DOMContentLoaded", function () {
+        const container = document.querySelector(".bg-images-container");
+        if (!container) return;
+
         const bgImages = [];
         const bgFolder = "bg/";
         const bgExtension = ".webp";
-        const totalImages = 51; // no. of 51 imgs in bg folder
+        const totalImages = 51;
         for (let i = 1; i <= totalImages; i++) {
           bgImages.push(`${bgFolder}sketch png-${i}${bgExtension}`);
         }
 
-        function getRandomImages(num) {
-          const shuffled = bgImages.sort(() => 0.5 - Math.random());
-          return shuffled.slice(0, num);
-        }
+        const SLOT_COUNT = 7;
+        const IMG_SIZE = 20; // vw, also used as % for overlap math
 
-        function getRandomScale() {
-          return Math.random() * 0.5 + 0.9; // Random scale between 0.8 and 1.3
-        }
+        const rand = (min, max) => Math.random() * (max - min) + min;
+        const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-        function getRandomPosition(usedPositions, imgSize) {
-          let position;
-          let overlap;
-          do {
-            overlap = false;
-            position = {
-              top: Math.random() * (100 - imgSize) + "%",
-              left: Math.random() * (100 - imgSize) + "%",
-            };
-            for (let pos of usedPositions) {
+        const slots = [];
+
+        function findPosition(self) {
+          for (let attempt = 0; attempt < 40; attempt++) {
+            const top = Math.random() * (100 - IMG_SIZE);
+            const left = Math.random() * (100 - IMG_SIZE);
+            let overlap = false;
+            for (const other of slots) {
+              if (other === self || other.top === null) continue;
               if (
-                Math.abs(parseFloat(pos.top) - parseFloat(position.top)) <
-                  imgSize &&
-                Math.abs(parseFloat(pos.left) - parseFloat(position.left)) <
-                  imgSize
+                Math.abs(other.top - top) < IMG_SIZE &&
+                Math.abs(other.left - left) < IMG_SIZE
               ) {
                 overlap = true;
                 break;
               }
             }
-          } while (overlap);
-          return position;
+            if (!overlap) return { top, left };
+          }
+          return {
+            top: Math.random() * (100 - IMG_SIZE),
+            left: Math.random() * (100 - IMG_SIZE),
+          };
         }
 
-        function fadeInImages(images) {
-          const container = document.querySelector(".bg-images-container");
-          container.innerHTML = "";
-          const usedPositions = [];
-          const imgSize = 20; // Image size in percentage
-          images.forEach((image, index) => {
-            const imgDiv = document.createElement("div");
-            imgDiv.className = "bg-image";
-            imgDiv.style.backgroundImage = `url('${image}')`;
-            imgDiv.style.backgroundSize = "contain";
-            imgDiv.style.backgroundPosition = "center";
-            imgDiv.style.backgroundRepeat = "no-repeat";
-            imgDiv.style.position = "absolute";
-            imgDiv.style.width = `${imgSize}vw`;
-            imgDiv.style.height = `${imgSize}vw`;
-            imgDiv.style.opacity = "0";
-            imgDiv.style.transition = "opacity 2s, transform 2s";
-            imgDiv.style.zIndex = "-1";
-            imgDiv.style.animationDelay = `${index * 0.5}s`;
-            imgDiv.style.transform = `scale(${getRandomScale()})`;
+        function pickUniqueImage(self) {
+          const taken = new Set(slots.filter((s) => s !== self && s.img).map((s) => s.img));
+          const available = bgImages.filter((src) => !taken.has(src));
+          return pick(available.length ? available : bgImages);
+        }
 
-            const position = getRandomPosition(usedPositions, imgSize);
-            usedPositions.push(position);
+        function runSlot(slot) {
+          const pos = findPosition(slot);
+          slot.top = pos.top;
+          slot.left = pos.left;
 
-            imgDiv.style.top = position.top;
-            imgDiv.style.left = position.left;
+          const img = pickUniqueImage(slot);
+          slot.img = img;
+          const scale = rand(0.9, 1.4);
+          const fadeIn = rand(1.5, 3);
+          const hold = rand(2, 5.5);
+          const fadeOut = rand(1.5, 3);
+          const gap = rand(0.3, 2.5);
 
-            container.appendChild(imgDiv);
-            setTimeout(() => {
-              imgDiv.style.opacity = "1";
-            }, 100);
+          slot.div.style.transition = "none";
+          slot.div.style.opacity = "0";
+          slot.div.style.backgroundImage = `url('${img}')`;
+          slot.div.style.top = pos.top + "%";
+          slot.div.style.left = pos.left + "%";
+          slot.div.style.transform = `scale(${scale})`;
+
+          requestAnimationFrame(() => {
+            slot.div.style.transition = `opacity ${fadeIn}s ease-in-out`;
+            slot.div.style.opacity = "1";
           });
-        }
 
-        function fadeOutImages() {
-          const images = document.querySelectorAll(".bg-image");
-          images.forEach((imgDiv) => {
-            imgDiv.style.opacity = "0";
-          });
-        }
-
-        function loopImages() {
-          const images = getRandomImages(7);
-          fadeInImages(images);
           setTimeout(() => {
-            fadeOutImages();
-            setTimeout(loopImages, 2000);
-          }, 4000); // Hold for 4 seconds
+            slot.div.style.transition = `opacity ${fadeOut}s ease-in-out`;
+            slot.div.style.opacity = "0";
+            setTimeout(() => {
+              slot.top = null;
+              slot.left = null;
+              slot.img = null;
+              setTimeout(() => runSlot(slot), gap * 1000);
+            }, fadeOut * 1000);
+          }, (fadeIn + hold) * 1000);
         }
 
-        loopImages();
+        for (let i = 0; i < SLOT_COUNT; i++) {
+          const div = document.createElement("div");
+          div.className = "bg-image";
+          Object.assign(div.style, {
+            position: "absolute",
+            width: IMG_SIZE + "vw",
+            height: IMG_SIZE + "vw",
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            opacity: "0",
+            zIndex: "-1",
+            pointerEvents: "none",
+          });
+          container.appendChild(div);
+          const slot = { div, top: null, left: null, img: null };
+          slots.push(slot);
+          setTimeout(() => runSlot(slot), rand(0, 2500));
+        }
       });
     </script>
 
