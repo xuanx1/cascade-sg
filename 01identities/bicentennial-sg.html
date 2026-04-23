@@ -357,59 +357,7 @@
 
         </div>
 
-        <script>
-
-    (function() {
-
-      var container = document.querySelector('.footer-bg-container');
-
-      if (!container) return;
-
-      var bgImages = [];
-
-      for (var i = 1; i <= 51; i++) {
-
-        bgImages.push('../bg/sketch png-' + String(i).padStart(2,'0') + '.webp');
-
-      }
-
-      function getRandom(n) { return [...bgImages].sort(function(){return 0.5-Math.random();}).slice(0,n); }
-
-      function show(imgs) {
-
-        container.innerHTML = '';
-
-        imgs.forEach(function(src) {
-
-          var d = document.createElement('div');
-
-          d.style.cssText = 'position:absolute;background-size:contain;background-position:center;background-repeat:no-repeat;opacity:0;transition:opacity 2s;width:11vw;height:11vw;pointer-events:none;';
-
-          d.style.backgroundImage = "url('" + src + "')";
-
-          d.style.top = (Math.random() * 60) + '%';
-
-          d.style.left = (Math.random() * 80) + '%';
-
-          d.style.transform = 'scale(' + (Math.random() * 0.4 + 0.8) + ')';
-
-          container.appendChild(d);
-
-          (function(el){ setTimeout(function(){ el.style.opacity='1'; }, 100); })(d);
-
-        });
-
-      }
-
-      function hide() { container.querySelectorAll('div').forEach(function(d){d.style.opacity='0';}); }
-
-      function loop() { show(getRandom(5)); setTimeout(function(){ hide(); setTimeout(loop,2000); },4000); }
-
-      loop();
-
-    })();
-
-  </script>
+        <script src="../js/footer-sketches.js"></script>
 
   </footer>
 
