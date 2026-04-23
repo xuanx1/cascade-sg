@@ -211,7 +211,205 @@
           @media (max-width: 720px) { .note3d__stage { width: 90%; } }
         </style>
 
-        <script src="../js/footer-sketches.js"></script>
+        <script>
+          (function(){
+            var stage = document.querySelector('.note3d__stage');
+            if(!stage) return;
+            var card = stage.querySelector('.note3d__card');
+            var rotY = 0, rotX = 0;
+            var dragging = false, startX = 0, startY = 0, startRotY = 0, startRotX = 0;
+            var lastMoveTime = 0, lastRotY = 0, velocity = 0;
+            var autoRaf = null;
+
+            function apply(){
+              card.style.transform = 'rotateY(' + rotY + 'deg) rotateX(' + rotX + 'deg)';
+              var rad = rotY * Math.PI / 180;
+              var faceVisible = Math.max(0, Math.cos(rad));
+              var tilt = Math.abs(Math.sin(rad)) + Math.abs(rotX) / 90;
+              var opacity = faceVisible * (0.35 + 0.65 * Math.min(1, tilt * 1.3));
+              var sweepOpacity = faceVisible * Math.min(1, Math.abs(Math.sin(rad * 1.5)) + Math.abs(rotX) / 50);
+              card.style.setProperty('--foil-angle', (rotY * 3) + 'deg');
+              card.style.setProperty('--foil-opacity', opacity.toFixed(3));
+              card.style.setProperty('--foil-sweep', (90 + rotY * 1.5 + rotX * 2) + 'deg');
+              card.style.setProperty('--foil-sweep-opacity', (sweepOpacity * 0.75).toFixed(3));
+            }
+
+            function onDown(e){
+              dragging = true;
+              stage.classList.add('is-dragging');
+              card.classList.add('no-anim');
+              var p = e.touches ? e.touches[0] : e;
+              startX = p.clientX; startY = p.clientY;
+              startRotY = rotY; startRotX = rotX;
+              lastRotY = rotY; lastMoveTime = Date.now(); velocity = 0;
+              stopAuto();
+              if(e.cancelable) e.preventDefault();
+            }
+            function onMove(e){
+              if(!dragging) return;
+              var p = e.touches ? e.touches[0] : e;
+              var dx = p.clientX - startX;
+              var dy = p.clientY - startY;
+              var newRotY = startRotY + dx * 0.5;
+              rotX = Math.max(-25, Math.min(25, startRotX - dy * 0.3));
+              var now = Date.now();
+              var dt = Math.max(1, now - lastMoveTime);
+              velocity = (newRotY - lastRotY) / dt;
+              lastRotY = newRotY; lastMoveTime = now;
+              rotY = newRotY;
+              apply();
+              if(e.cancelable) e.preventDefault();
+            }
+            function onUp(){
+              if(!dragging) return;
+              dragging = false;
+              stage.classList.remove('is-dragging');
+              card.classList.remove('no-anim');
+              if(Math.abs(velocity) > 0.05){
+                rotY += velocity * 180;
+                apply();
+              }
+            }
+
+            stage.addEventListener('mousedown', onDown);
+            window.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup', onUp);
+            stage.addEventListener('touchstart', onDown, {passive:false});
+            window.addEventListener('touchmove', onMove, {passive:false});
+            window.addEventListener('touchend', onUp);
+
+            stage.addEventListener('dblclick', function(){
+              rotY += 180; apply();
+            });
+
+            function autoRotate(){
+              if(dragging) return;
+              rotY += 0.2; apply();
+              autoRaf = requestAnimationFrame(autoRotate);
+            }
+            function stopAuto(){ if(autoRaf){ cancelAnimationFrame(autoRaf); autoRaf = null; } }
+
+            var io = new IntersectionObserver(function(entries){
+              entries.forEach(function(entry){
+                if(entry.isIntersecting && !dragging){ if(!autoRaf) autoRaf = requestAnimationFrame(autoRotate); }
+                else { stopAuto(); }
+              });
+            }, {threshold: 0.25});
+            io.observe(stage);
+
+            apply();
+          })();
+        </script>
+
+        <div class="spacer-large"></div>
+
+      </main>
+
+      <div class="back-to-top-bar">
+
+        <a href="#top">
+
+          <svg width="18" height="18" viewBox="0 0 1.44 1.44" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h1.44v1.44H0z" fill="none"/><path d="M0.198 0.918L0.282 1.002L0.72 0.565L1.158 1.002L1.242 0.918L0.72 0.395Z" fill="currentColor"/></svg>
+
+          Back to Top
+
+        </a>
+
+      </div>
+
+
+
+      <footer class="footer" style="position:relative;overflow:hidden;border-top:1px solid #0000001a;">
+
+    <div class="footer-bg-container" style="position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;"></div>
+
+        <div class="container" style="position:relative;z-index:1;">
+
+          <div class="footer__content">
+
+            <div class="footer__main">
+
+              <div class="footer__nav">
+
+                <a href="../01identities/identities-home.html" class="footer__nav-link w-inline-block" data-hover-img="../images/hover-identities.webp"><div class="text-xlarge">Identities</div></a>
+
+                <a href="../02spatial/spatial-home.html" class="footer__nav-link w-inline-block" data-hover-img="../images/hover-spatial.webp"><div class="text-xlarge">Spatial Planning</div></a>
+
+                <a href="../03industrial/industrial-home.html" class="footer__nav-link w-inline-block" data-hover-img="../images/hover-industrial.webp"><div class="text-xlarge">Industrial Design</div></a>
+
+                <a href="../04datavis/datavis-home.html" class="footer__nav-link w-inline-block" data-hover-img="../images/hover-datavis.webp"><div class="text-xlarge">Data Visualisation</div></a>
+
+                <a href="../05intangible/intan-home.html" class="footer__nav-link w-inline-block" data-hover-img="../images/hover-intangibles.webp"><div class="text-xlarge">Intangibles</div></a>
+
+              </div>
+
+                            <div class="footer__legal">
+
+                <div>CASCADE © <span class="copyright-year">2026</span> — All rights reserved.</div>
+
+                <div style="display:flex;align-items:center;gap:0.5rem"><a href="../index.html" class="footer__link w-inline-block"><div>Home</div></a> / <a href="../contact.html" class="footer__link w-inline-block"><div>Contact</div></a> / <a href="../privacy-policy.html" class="footer__link w-inline-block"><div>Privacy Policy</div></a></div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <script>
+
+    (function() {
+
+      var container = document.querySelector('.footer-bg-container');
+
+      if (!container) return;
+
+      var bgImages = [];
+
+      for (var i = 1; i <= 51; i++) {
+
+        bgImages.push('../bg/sketch png-' + String(i).padStart(2,'0') + '.webp');
+
+      }
+
+      function getRandom(n) { return [...bgImages].sort(function(){return 0.5-Math.random();}).slice(0,n); }
+
+      function show(imgs) {
+
+        container.innerHTML = '';
+
+        imgs.forEach(function(src) {
+
+          var d = document.createElement('div');
+
+          d.style.cssText = 'position:absolute;background-size:contain;background-position:center;background-repeat:no-repeat;opacity:0;transition:opacity 2s;width:11vw;height:11vw;pointer-events:none;';
+
+          d.style.backgroundImage = "url('" + src + "')";
+
+          d.style.top = (Math.random() * 60) + '%';
+
+          d.style.left = (Math.random() * 80) + '%';
+
+          d.style.transform = 'scale(' + (Math.random() * 0.4 + 0.8) + ')';
+
+          container.appendChild(d);
+
+          (function(el){ setTimeout(function(){ el.style.opacity='1'; }, 100); })(d);
+
+        });
+
+      }
+
+      function hide() { container.querySelectorAll('div').forEach(function(d){d.style.opacity='0';}); }
+
+      function loop() { show(getRandom(5)); setTimeout(function(){ hide(); setTimeout(loop,2000); },4000); }
+
+      loop();
+
+    })();
+
+  </script>
 
   </footer>
 
