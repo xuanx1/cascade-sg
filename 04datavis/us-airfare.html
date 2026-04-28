@@ -84,7 +84,43 @@
             <div class="max-width-regular">
               <div class="project__info-content" style="text-align: center; padding: 4rem 0;">
                 <a href="https://xuanx1.github.io/USairfare/us_airfare_interactive_map_clean.html" target="_blank" class="footer__link w-inline-block" style="font-size: 1.5rem; letter-spacing: 1px;">View Live -></a>
-                <img src="images/usdom.webp" loading="lazy" alt="Domestic Airfare within the U.S" class="project-image" style="margin-top: 3rem;" />
+                <div class="project-media" style="position:relative; margin-top: 3rem;">
+                  <video class="project-image media__video" src="../video/flight-us.mp4" muted loop playsinline preload="metadata" style="display:block; width:100%; height:auto;"></video>
+                  <img src="images/usdom.webp" loading="lazy" alt="Domestic Airfare within the U.S" class="project-image media__cover" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition: opacity 0.6s ease; will-change: opacity;" />
+                </div>
+                <script>
+                  (function(){
+                    var wrap = document.currentScript.previousElementSibling;
+                    var cover = wrap.querySelector('.media__cover');
+                    var video = wrap.querySelector('.media__video');
+                    if (!cover || !video) return;
+                    var faded = null;
+                    var pointerTimer = null;
+                    function setFaded(next) {
+                      if (faded === next) return;
+                      faded = next;
+                      cover.style.opacity = next ? '0' : '1';
+                      if (pointerTimer) { clearTimeout(pointerTimer); pointerTimer = null; }
+                      if (next) {
+                        pointerTimer = setTimeout(function(){ cover.style.pointerEvents = 'none'; }, 600);
+                        var p = video.play();
+                        if (p && typeof p.catch === 'function') p.catch(function(){});
+                      } else {
+                        cover.style.pointerEvents = 'auto';
+                        video.pause();
+                      }
+                    }
+                    function update() {
+                      var rect = wrap.getBoundingClientRect();
+                      var winH = window.innerHeight;
+                      var inView = rect.top < winH * 0.85 && rect.bottom > winH * 0.15;
+                      setFaded(inView);
+                    }
+                    window.addEventListener('scroll', update, { passive: true });
+                    window.addEventListener('resize', update);
+                    update();
+                  })();
+                </script>
               </div>
             </div>
           </div>
