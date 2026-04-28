@@ -331,13 +331,19 @@
     (function() {
       var imgs = document.querySelectorAll('.thumbnail-project');
       if (!imgs.length) return;
+      function getThumbOffsetRatio(progress, maxShift) {
+        var rawOffset = (progress - 1) * maxShift;
+        return Math.max(Math.min(rawOffset, maxShift), -maxShift) / maxShift;
+      }
       function update() {
         imgs.forEach(function(img) {
           var rect = img.parentElement.getBoundingClientRect();
           var winH = window.innerHeight;
           var progress = (rect.top + rect.height / 2) / winH;
-          var shift = (progress - 1) * 20;
-          img.style.transform = 'translateY(' + shift + '%)';
+          var ratio = getThumbOffsetRatio(progress, 10);
+          var shift = ratio * 10;
+          img.style.setProperty('--thumb-shift', shift + '%');
+          img.style.setProperty('--thumb-offset-ratio', ratio.toFixed(3));
         });
       }
       window.addEventListener('scroll', update, { passive: true });
