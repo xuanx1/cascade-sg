@@ -120,5 +120,16 @@
         </div>
         <script src="../js/footer-sketches.js"></script>
       </footer>
-  </body>
+    </div>
+
+  <script>
+    (function() {
+      document.querySelectorAll('.footer__nav-link[data-hover-img]').forEach(function(link) {
+        link.style.setProperty('--hover-img', 'url("' + new URL(link.getAttribute('data-hover-img'), window.location.href).href + '")');
+      });
+    })();
+  </script>
+
+  <script src="../js/page-transitions.js"></script>
+</body>
 </html>
