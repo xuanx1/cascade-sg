@@ -156,6 +156,14 @@
   var images = document.querySelectorAll('.project-image, .before-after__overlay img');
   if (!images.length) return;
 
+  function isVideo(el) { return el && el.tagName === 'VIDEO'; }
+  function isReady(el) {
+    if (isVideo(el)) return el.readyState >= 2 && el.videoWidth > 0;
+    return el.complete && el.naturalWidth > 0;
+  }
+  function natW(el) { return isVideo(el) ? el.videoWidth  : el.naturalWidth;  }
+  function natH(el) { return isVideo(el) ? el.videoHeight : el.naturalHeight; }
+
   var RADIUS = 75;
   var ZOOM = 2;
   var DIAMETER = RADIUS * 2;
@@ -186,7 +194,7 @@
   var activeImg = null;
 
   function drawLens(e) {
-    if (!activeImg || !activeImg.complete) return;
+    if (!activeImg || !isReady(activeImg)) return;
     var rect = activeImg.getBoundingClientRect();
     var relX = e.clientX - rect.left;
     var relY = e.clientY - rect.top;
@@ -195,11 +203,9 @@
     lens.style.left = (e.clientX - RADIUS) + 'px';
     lens.style.top = (e.clientY - RADIUS) + 'px';
 
-    // Map mouse position to image natural coordinates
-    var natW = activeImg.naturalWidth;
-    var natH = activeImg.naturalHeight;
-    var scaleX = natW / rect.width;
-    var scaleY = natH / rect.height;
+    // Map mouse position to source media's natural coordinates
+    var scaleX = natW(activeImg) / rect.width;
+    var scaleY = natH(activeImg) / rect.height;
 
     var srcX = relX * scaleX;
     var srcY = relY * scaleY;
@@ -233,11 +239,25 @@
     ctx.restore();
   }
 
+  // Keep last pointer position so the rAF loop can redraw without a mousemove
+  var lastEvt = null;
+  var rafId = null;
+  function loop() {
+    rafId = null;
+    if (activeImg && isVideo(activeImg) && lastEvt) {
+      drawLens(lastEvt);
+      rafId = requestAnimationFrame(loop);
+    }
+  }
+
   images.forEach(function (img) {
     img.addEventListener('mouseenter', function () {
       activeImg = this;
       lens.style.display = 'block';
       document.body.classList.add('mag-active');
+      if (isVideo(activeImg) && lastEvt && rafId == null) {
+        rafId = requestAnimationFrame(loop);
+      }
     });
 
     img.addEventListener('mouseleave', function () {
@@ -245,8 +265,15 @@
       activeImg = null;
       ctx.clearRect(0, 0, DIAMETER, DIAMETER);
       document.body.classList.remove('mag-active');
+      if (rafId != null) { cancelAnimationFrame(rafId); rafId = null; }
     });
 
-    img.addEventListener('mousemove', drawLens);
+    img.addEventListener('mousemove', function (e) {
+      lastEvt = e;
+      drawLens(e);
+      if (isVideo(activeImg) && rafId == null) {
+        rafId = requestAnimationFrame(loop);
+      }
+    });
   });
 })();
