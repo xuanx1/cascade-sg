@@ -7,7 +7,7 @@
     if (!container) return;
 
     var bgFolder = scriptSrc ? new URL('../bg/', scriptSrc).href : 'bg/';
-    var totalImages = 51;
+    var totalImages = 57;
     var bgImages = [];
     for (var i = 1; i <= totalImages; i++) {
       bgImages.push(bgFolder + 'sketch png-' + String(i).padStart(2, '0') + '.webp');

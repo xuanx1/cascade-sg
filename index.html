@@ -21,7 +21,7 @@
     <meta
       property="og:image"
       itemprop="image"
-      content="https://cascade-sg.com/images/favicon/favicon.svg"
+      content="https://cascade-sg.com/images/logo/cascade-color.png"
     />
     <meta property="og:type" content="website" />
     <meta
@@ -39,7 +39,7 @@
     <meta name="googlebot" content="index, follow" />
     <meta name="google" content="sitelinkssearchbox" />
 
-    <link rel="icon" href="./images/favicon/favicon.svg" />
+    <link rel="icon" href="./images/logo/cascade-color.png" />
     <link href="css/webflow-style.css" rel="stylesheet" type="text/css" />
     <style>
       @font-face {
@@ -57,15 +57,60 @@
         src: url('fonts/montserrat-italic.woff2') format('woff2');
       }
       .brand-logo {
-        transition: filter 0.2s ease;
-        filter: brightness(0.45);
+        position: relative;
+        display: inline-block;
+        height: 4rem;
+        width: 4rem;
       }
-      .brand-logo:hover {
-        filter: brightness(1);
+      .brand-logo img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: opacity 0.3s ease;
+      }
+      .brand-logo .brand-logo-bw { opacity: 0; }
+      .brand:hover .brand-logo .brand-logo-color { opacity: 0; }
+      .brand:hover .brand-logo .brand-logo-bw { opacity: 1; }
+      @keyframes cascadeFlow {
+        0%   { background-position: 0% 50%; }
+        100% { background-position: 200% 50%; }
+      }
+      @keyframes logoHueFlow {
+        0%   { filter: hue-rotate(0deg); }
+        100% { filter: hue-rotate(360deg); }
+      }
+      .brand-logo .brand-logo-color {
+        animation: logoHueFlow 6s linear infinite;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .brand-logo .brand-logo-color { animation: none; }
+      }
+      .brand:hover .brand-text {
+        background-image: linear-gradient(
+          90deg,
+          #00d8f0 0%,
+          #00a8f0 14%,
+          #0078f0 28%,
+          #4860f0 42%,
+          #7848f0 56%,
+          #9060f0 70%,
+          #c048f0 84%,
+          #00d8f0 100%
+        );
+        background-size: 200% auto;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        animation: cascadeFlow 6s linear infinite;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .brand:hover .brand-text { animation: none; }
       }
       @media (max-width: 768px) {
         .brand-text { display: none; }
-        .brand-logo, .brand-logo:hover { filter: brightness(0.45); }
         .brand.w-nav-brand { padding-left: 10px !important; }
         #w-node-b4bed388d8a5 { display: none !important; }
       }
@@ -110,13 +155,13 @@
             (n.className += t + "touch"));
       })(window, document);
     </script>
-    <!-- ./images/favicon/favicon.svg OR ./images/favicon-x.svg -->
+    <!-- ./images/logo/cascade-color.png OR ./images/favicon-x.svg -->
     <link
-      href="./images/favicon/favicon.svg"
+      href="./images/logo/cascade-color.png"
       rel="shortcut icon"
-      type="image/x-icon"
+      type="image/png"
     />
-    <link href="./images/favicon/favicon.svg" rel="apple-touch-icon" />
+    <link href="./images/logo/cascade-color.png" rel="apple-touch-icon" />
   </head>
 
   <!--custom cursor-->
@@ -281,13 +326,20 @@ body:hover .cursor,
           class="brand w-clearfix w-nav-brand"
           style="display:flex;align-items:center;padding-left:20px;padding-top:20px;"
         >
-          <img
-            src="images/favicon-x.svg"
-            alt="CASCADE"
-            class="brand-logo"
-            style="height: 4rem; width: auto;"
-          />
-          <span class="brand-text" style="margin-left:1rem; font-size:1.3rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase;">CASCADE</span>
+          <span class="brand-logo">
+            <img
+              src="images/logo/cascade-color.png"
+              alt="CASCADE"
+              class="brand-logo-color"
+            />
+            <img
+              src="images/logo/cascade-bw.png"
+              alt=""
+              aria-hidden="true"
+              class="brand-logo-bw"
+            />
+          </span>
+          <span class="brand-text" style="margin-left:6px; font-size:1.3rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase;">CASCADE</span>
         </a>
 
 
@@ -322,9 +374,9 @@ body:hover .cursor,
         const bgImages = [];
         const bgFolder = "bg/";
         const bgExtension = ".webp";
-        const totalImages = 51;
+        const totalImages = 57;
         for (let i = 1; i <= totalImages; i++) {
-          bgImages.push(`${bgFolder}sketch png-${i}${bgExtension}`);
+          bgImages.push(`${bgFolder}sketch png-${String(i).padStart(2, "0")}${bgExtension}`);
         }
 
         const SLOT_COUNT = 7;
