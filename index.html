@@ -155,7 +155,101 @@
             (n.className += t + "touch"));
       })(window, document);
     </script>
-    <!-- ./images/logo/cascade-color.png OR ./images/favicon-x.svg -->
+    <script>
+      (function () {
+        var fromInternal = false;
+        try {
+          if (document.referrer) {
+            var refHost = new URL(document.referrer).hostname;
+            fromInternal = refHost === location.hostname;
+          }
+        } catch (e) {}
+        var alreadyShown = false;
+        try {
+          alreadyShown = sessionStorage.getItem("cascadeLoaderShown") === "1";
+        } catch (e) {}
+        if (fromInternal || alreadyShown) {
+          document.documentElement.classList.add("cascade-loader-skip");
+        }
+      })();
+    </script>
+    <style>
+      .site-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 9000;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 1s ease;
+      }
+      .site-loader.is-leaving {
+        opacity: 0;
+        pointer-events: none;
+      }
+      html.cascade-loader-skip .site-loader { display: none; }
+      .site-loader_logo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 8rem;
+        height: 8rem;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+      .site-loader_logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        animation: logoHueFlow 6s linear infinite;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .site-loader_logo img { animation: none; }
+      }
+      .site-loader_typing {
+        position: absolute;
+        top: calc(50% + 5rem - 10px);
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        pointer-events: none;
+        color: #111;
+        opacity: 0;
+      }
+      .site-loader_typing.is-active { opacity: 1; }
+      .site-loader_typing_ghost {
+        display: inline-block;
+        visibility: hidden;
+        margin-right: -0.18em;
+      }
+      .site-loader_typing_visible {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .site-loader_typing_caret {
+        display: inline-block;
+        width: 0.08em;
+        height: 1em;
+        margin-left: 0.06em;
+        vertical-align: -0.08em;
+        background: currentColor;
+        animation: caretBlink 1.05s steps(2, jump-none) infinite;
+      }
+      @keyframes caretBlink {
+        0%, 49%   { opacity: 1; }
+        50%, 100% { opacity: 0; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .site-loader_typing_caret { animation: none; }
+      }
+    </style>
     <link
       href="./images/logo/cascade-color.png"
       rel="shortcut icon"
@@ -166,6 +260,56 @@
 
   <!--custom cursor-->
   <body class="of-hidden">
+    <div class="site-loader" aria-hidden="true">
+      <div class="site-loader_logo">
+        <img src="images/logo/cascade-color.png" alt="" />
+      </div>
+      <div class="site-loader_typing">
+        <span class="site-loader_typing_ghost">CASCADE</span>
+        <span class="site-loader_typing_visible">
+          <span class="site-loader_typing_text"></span><span class="site-loader_typing_caret"></span>
+        </span>
+      </div>
+    </div>
+    <script>
+      (function () {
+        if (document.documentElement.classList.contains("cascade-loader-skip")) return;
+        try { sessionStorage.setItem("cascadeLoaderShown", "1"); } catch (e) {}
+        var typingEl = document.querySelector(".site-loader_typing_text");
+        var typingWrapper = document.querySelector(".site-loader_typing");
+        var overlay = document.querySelector(".site-loader");
+        if (!typingEl || !typingWrapper || !overlay) return;
+        function endLoader() {
+          overlay.classList.add("is-leaving");
+          setTimeout(function () {
+            if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+          }, 1000);
+        }
+        var word = "CASCADE";
+        var reduceMotion =
+          window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        setTimeout(function () {
+          typingWrapper.classList.add("is-active");
+          if (reduceMotion) {
+            typingEl.textContent = word;
+            setTimeout(endLoader, 500);
+          } else {
+            var i = 0;
+            (function typeNext() {
+              if (i >= word.length) {
+                setTimeout(endLoader, 500);
+                return;
+              }
+              typingEl.textContent = word.slice(0, ++i);
+              var base = 54 + Math.random() * 44;
+              var extra = "AE".indexOf(word[i - 1]) >= 0 ? 15 : 0;
+              setTimeout(typeNext, base + extra);
+            })();
+          }
+        }, 500);
+      })();
+    </script>
     <header class="header is--blur">
       <div class="cursor-wrapper">
         <div class="cursor"></div>

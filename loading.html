@@ -51,7 +51,6 @@
             (n.className += t + "touch"));
       })(window, document);
     </script>
-    <!-- ./images/logo/cascade-color.png OR ./images/favicon-x.svg -->
     <link
       href="./images/logo/cascade-color.png"
       rel="shortcut icon"
@@ -60,12 +59,88 @@
     <link href="./images/logo/cascade-color.png" rel="apple-touch-icon" />
 
     <style>
+      @font-face {
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 100 900;
+        font-display: swap;
+        src: url('fonts/montserrat-normal.woff2') format('woff2');
+      }
+
       .loader {
         display: flex;
       }
 
       html.w-editor .loader {
         display: none;
+      }
+
+      .loader_logo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 8rem;
+        height: 8rem;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+      @keyframes logoHueFlow {
+        0%   { filter: hue-rotate(0deg); }
+        100% { filter: hue-rotate(360deg); }
+      }
+      .loader_logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        animation: logoHueFlow 6s linear infinite;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .loader_logo img { animation: none; }
+      }
+
+      .loader_typing {
+        position: absolute;
+        top: calc(50% + 5rem - 10px);
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        pointer-events: none;
+        color: #111;
+        opacity: 0;
+      }
+      .loader_typing.is-active {
+        opacity: 1;
+      }
+      .loader_typing_ghost {
+        display: inline-block;
+        visibility: hidden;
+        margin-right: -0.18em;
+      }
+      .loader_typing_visible {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .loader_typing_caret {
+        display: inline-block;
+        width: 0.08em;
+        height: 1em;
+        margin-left: 0.06em;
+        vertical-align: -0.08em;
+        background: currentColor;
+        animation: caretBlink 1.05s steps(2, jump-none) infinite;
+      }
+      @keyframes caretBlink {
+        0%, 49%   { opacity: 1; }
+        50%, 100% { opacity: 0; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .loader_typing_caret { animation: none; }
       }
     </style>
   </head>
@@ -86,15 +161,15 @@
           <div class="trigger"></div>
           <div class="loader_top">
             <div class="loader_progress"></div>
-            <div class="container is-loader-top">
-              <p class="loader_p">Cascade</p>
-              <p class="loader_p is-right">Design<br />Studio</p>
-            </div>
           </div>
-          <div class="loader_bottom">
-            <div class="container is-loader-bottom">
-              <p class="loader_number"></p>
-            </div>
+          <div class="loader_logo">
+            <img src="./images/logo/cascade-color.png" alt="CASCADE" />
+          </div>
+          <div class="loader_typing" aria-hidden="true">
+            <span class="loader_typing_ghost">CASCADE</span>
+            <span class="loader_typing_visible">
+              <span class="loader_typing_text"></span><span class="loader_typing_caret"></span>
+            </span>
           </div>
         </div>
         <section class="section">
@@ -111,51 +186,53 @@
     <script>
       let customEase =
         "M0,0,C0,0,0.13,0.34,0.238,0.442,0.305,0.506,0.322,0.514,0.396,0.54,0.478,0.568,0.468,0.56,0.522,0.584,0.572,0.606,0.61,0.719,0.714,0.826,0.798,0.912,1,1,1,1";
-      let counter = {
-        value: 0,
-      };
-      let loaderDuration = 3;
-
-      // If not a first time visit in this tab
-      if (sessionStorage.getItem("visited") !== null) {
-        loaderDuration = 2;
-        counter = {
-          value: 75,
-        };
-      }
       sessionStorage.setItem("visited", "true");
 
-      function updateLoaderText() {
-        let progress = Math.round(counter.value);
-        $(".loader_number").text(progress);
-      }
       function endLoaderAnimation() {
         $(".trigger").click();
         setTimeout(() => {
           $("body").fadeOut(1000, () => {
             window.location.href = "index.html";
           });
-        }, 2000);
+        }, 600);
       }
 
-      let tl = gsap.timeline({
-        onComplete: endLoaderAnimation,
-      });
-      tl.to(counter, {
-        value: 100,
-        onUpdate: updateLoaderText,
-        duration: loaderDuration,
+      const typingEl = document.querySelector(".loader_typing_text");
+      const typingWrapper = document.querySelector(".loader_typing");
+      if (typingEl && typingWrapper) {
+        const word = "CASCADE";
+        const reduceMotion =
+          window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        setTimeout(() => {
+          typingWrapper.classList.add("is-active");
+          if (reduceMotion) {
+            typingEl.textContent = word;
+            setTimeout(endLoaderAnimation, 500);
+          } else {
+            let i = 0;
+            (function typeNext() {
+              if (i >= word.length) {
+                setTimeout(endLoaderAnimation, 500);
+                return;
+              }
+              typingEl.textContent = word.slice(0, ++i);
+              // human-feel jitter: ~54-98ms per keystroke, longer pause after vowels
+              const base = 54 + Math.random() * 44;
+              const extra = "AE".includes(word[i - 1]) ? 15 : 0;
+              setTimeout(typeNext, base + extra);
+            })();
+          }
+        }, 500);
+      } else {
+        setTimeout(endLoaderAnimation, 2000);
+      }
+
+      gsap.to(".loader_progress", {
+        width: "100%",
+        duration: 2,
         ease: CustomEase.create("custom", customEase),
       });
-      tl.to(
-        ".loader_progress",
-        {
-          width: "100%",
-          duration: loaderDuration,
-          ease: CustomEase.create("custom", customEase),
-        },
-        0,
-      );
     </script>
   </body>
 </html>

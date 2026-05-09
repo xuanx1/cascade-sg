@@ -23,7 +23,7 @@ A portfolio website showcasing CASCADE's design work across five disciplines:
 ├── bg/                     # Background sketch images
 ├── css/                    # Stylesheets
 ├── fonts/                  # Self-hosted web fonts
-├── images/                 # Shared images and favicons
+├── images/                 # Shared images and logos
 └── js/                     # Scripts (GSAP, jQuery, Webflow, cursor)
 ```
 
