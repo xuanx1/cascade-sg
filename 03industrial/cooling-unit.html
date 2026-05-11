@@ -190,9 +190,27 @@
                 <div class="project__address">
                   <div class="text-large">Additive Fabrication</div>
                 </div>
-                <div class="project__title">
+                <div class="project__title" style="position:relative;">
                   <h1 class="heading-huge">Outdoor Cooling Unit</h1>
+                  <img src="images/3dmf-logo.webp" loading="lazy" alt="3D Metal Forge" class="dmf-hover-img" style="position:absolute;top:calc(-1.5rem + 20px);left:calc(-12rem + 20px);width:154px;height:auto;animation:dmfFloat 4s ease-in-out infinite;pointer-events:none;z-index:2;" />
                 </div>
+
+                <style>
+                  @keyframes dmfFloat {
+                    0%, 100% { transform: translateY(0) rotate(0deg); }
+                    25% { transform: translateY(-10px) rotate(-2deg); }
+                    50% { transform: translateY(-4px) rotate(3deg); }
+                    75% { transform: translateY(-12px) rotate(-1deg); }
+                  }
+                  @media (max-width: 768px) {
+                    .dmf-hover-img {
+                      width: 98px !important;
+                      left: auto !important;
+                      right: calc(-1rem + 170px) !important;
+                      top: calc(-3rem + 90px) !important;
+                    }
+                  }
+                </style>
                 <div class="project__overview">
                   <div class="project__overview-item">
                     <h2 class="heading-small c3">Year</h2>

@@ -109,9 +109,27 @@
                 <div class="project__address">
                   <div class="text-large">Prints &amp; Visual Merchandising Display</div>
                 </div>
-                <div class="project__title">
+                <div class="project__title" style="position:relative;">
                   <h1 class="heading-huge">The Singapore Garden Collection</h1>
+                  <img src="images/gbb-logo.webp" loading="lazy" alt="Gardens by the Bay" class="gbb-hover-img" style="position:absolute;top:calc(-1.5rem + 100px);left:calc(-12rem + 500px);width:154px;height:auto;animation:gbbFloat 4s ease-in-out infinite;pointer-events:none;z-index:2;" />
                 </div>
+
+                <style>
+                  @keyframes gbbFloat {
+                    0%, 100% { transform: translateY(0) rotate(0deg); }
+                    25% { transform: translateY(-10px) rotate(-2deg); }
+                    50% { transform: translateY(-4px) rotate(3deg); }
+                    75% { transform: translateY(-12px) rotate(-1deg); }
+                  }
+                  @media (max-width: 768px) {
+                    .gbb-hover-img {
+                      width: 98px !important;
+                      right: calc(-1rem + 50px) !important;
+                      left: auto !important;
+                      top: calc(-3rem + 150px) !important;
+                    }
+                  }
+                </style>
                 <div class="project__overview">
                   <div class="project__overview-item">
                     <h2 class="heading-small c3">Year</h2>
