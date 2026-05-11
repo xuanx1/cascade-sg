@@ -15,28 +15,6 @@
 })();
 
 (function () {
-  // Auto-sync thumbnail tags from project spec pages
-  var links = document.querySelectorAll('.projects__link[href]');
-  if (!links.length) return;
-  links.forEach(function (link) {
-    var tagEl = link.querySelector('.tag .text-small');
-    if (!tagEl) return;
-    var href = link.getAttribute('href');
-    fetch(href)
-      .then(function (r) { return r.text(); })
-      .then(function (html) {
-        var tmp = document.createElement('div');
-        tmp.innerHTML = html;
-        var addr = tmp.querySelector('.project__address .text-large');
-        if (addr && addr.textContent.trim()) {
-          tagEl.textContent = addr.textContent.trim();
-        }
-      })
-      .catch(function () {});
-  });
-})();
-
-(function () {
   // Custom cursor — skip if already present (index.html has its own)
   if (document.querySelector('.cursor-wrapper')) return;
 
@@ -90,37 +68,35 @@
 })();
 
 (function () {
-  // Inject overlay
-  var overlay = document.createElement('div');
-  overlay.style.cssText = [
-    'position:fixed',
-    'inset:0',
-    'background:#fff',
-    'z-index:99999',
-    'pointer-events:none',
-    'opacity:1',
-    'transition:opacity 0.9s ease'
-  ].join(';');
-  document.documentElement.appendChild(overlay);
+  var root = document.documentElement;
+  // Wait for: category-home thumbnails AND project-page hero images.
+  var waitFor = document.querySelectorAll('.thumbnail-project, .absolute-img');
 
-  // Fade in: reveal the incoming page (double rAF for paint timing)
-  requestAnimationFrame(function () {
-    requestAnimationFrame(function () {
-      overlay.style.opacity = '0';
+  function reveal() {
+    if (root.classList.contains('page-ready')) return;
+    root.classList.add('page-ready');
+  }
+
+  if (waitFor.length) {
+    var remaining = waitFor.length;
+    function tick() { if (--remaining <= 0) reveal(); }
+    Array.prototype.forEach.call(waitFor, function (img) {
+      if (img.complete && img.naturalWidth > 0) { tick(); return; }
+      img.addEventListener('load', tick, { once: true });
+      img.addEventListener('error', tick, { once: true });
     });
-  });
+    // Safety cap: don't wait longer than 3s even if some image stalls.
+    setTimeout(reveal, 3000);
+  } else {
+    // Nothing to wait for — reveal next frame so the transition triggers.
+    requestAnimationFrame(reveal);
+  }
 
-  // bfcache restore (browser back/forward) — overlay stuck at opacity:1, force fade out
+  // bfcache restore (browser back/forward) — re-trigger fade
   window.addEventListener('pageshow', function (e) {
     if (e.persisted) {
-      overlay.style.transition = 'none';
-      overlay.style.opacity = '1';
-      requestAnimationFrame(function () {
-        overlay.style.transition = 'opacity 0.9s ease';
-        requestAnimationFrame(function () {
-          overlay.style.opacity = '0';
-        });
-      });
+      root.classList.remove('page-ready', 'page-leaving');
+      requestAnimationFrame(reveal);
     }
   });
 
@@ -144,7 +120,8 @@
     } catch (err) { return; }
 
     e.preventDefault();
-    overlay.style.opacity = '1';
+    root.classList.remove('page-ready');
+    root.classList.add('page-leaving');
     setTimeout(function () {
       window.location.href = href;
     }, 950);
