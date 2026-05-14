@@ -180,14 +180,28 @@
     lens.style.left = (e.clientX - RADIUS) + 'px';
     lens.style.top = (e.clientY - RADIUS) + 'px';
 
-    // Map mouse position to source media's natural coordinates
-    var scaleX = natW(activeImg) / rect.width;
-    var scaleY = natH(activeImg) / rect.height;
-
-    var srcX = relX * scaleX;
-    var srcY = relY * scaleY;
-    var srcHalfW = RADIUS * scaleX / ZOOM;
-    var srcHalfH = RADIUS * scaleY / ZOOM;
+    // Map mouse position to source media's natural coordinates, accounting for object-fit
+    var nW = natW(activeImg), nH = natH(activeImg);
+    var fit = isVideo(activeImg) ? 'fill' : (window.getComputedStyle(activeImg).objectFit || 'fill');
+    var srcX, srcY, srcHalfW, srcHalfH;
+    if (fit === 'cover' || fit === 'contain') {
+      var displayScale = (fit === 'cover')
+        ? Math.max(rect.width / nW, rect.height / nH)
+        : Math.min(rect.width / nW, rect.height / nH);
+      var offsetX = (nW * displayScale - rect.width) / 2;
+      var offsetY = (nH * displayScale - rect.height) / 2;
+      srcX = (relX + offsetX) / displayScale;
+      srcY = (relY + offsetY) / displayScale;
+      srcHalfW = RADIUS / displayScale / ZOOM;
+      srcHalfH = RADIUS / displayScale / ZOOM;
+    } else {
+      var scaleX = nW / rect.width;
+      var scaleY = nH / rect.height;
+      srcX = relX * scaleX;
+      srcY = relY * scaleY;
+      srcHalfW = RADIUS * scaleX / ZOOM;
+      srcHalfH = RADIUS * scaleY / ZOOM;
+    }
 
     // Clear and clip to circle
     ctx.clearRect(0, 0, DIAMETER, DIAMETER);

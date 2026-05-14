@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title>The Singapore Garden Collection | CASCADE</title>
     <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <link rel="canonical" href="https://cascade-sg.com/01identities/sg-garden.html" />
+    <link rel="canonical" href="https://cascade-sg.com/01identities/scarf-gbb.html" />
     <meta name="description" content="The Singapore Garden Collection — a retail and textile design concept inspired by Singapore's everyday flora, developed for a Gardens by the Bay souvenir retail context." />
     <link href="../css/cat-home-style.css" rel="stylesheet" type="text/css" />
     <link href="../images/logo/cascade-color.png" rel="shortcut icon" type="image/png" />
@@ -27,38 +27,142 @@
         height: 100%;
         object-fit: cover;
         opacity: 0;
-        transition: opacity 0.5s ease;
-        z-index: 1;
+        transition: opacity 0.9s ease;
       }
       .scarf-switcher__frame img.active {
         opacity: 1;
-        z-index: 2;
       }
       .scarf-switcher__controls {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 0.75rem;
+        gap: 1rem;
       }
-      .scarf-switcher__button {
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        background: rgba(0, 0, 0, 0.04);
-        color: #2f3741;
-        padding: 0.75rem 1.25rem;
-        border-radius: 999px;
-        font-size: 0.95rem;
-        font-family: Circular, sans-serif;
+      .scarf-switcher__thumb {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0;
+        border: none;
+        background: transparent;
         cursor: pointer;
-        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        font-family: Circular, sans-serif;
+        color: #2f3741;
+        width: 140px;
       }
-      .scarf-switcher__button.active {
-        background: #111;
-        color: #ffffff;
+      .scarf-switcher__thumb-frame {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        border-radius: 0.75rem;
+        border: 2px solid transparent;
+        transition: border-color 0.2s ease, transform 0.2s ease;
+      }
+      .scarf-switcher__thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s ease;
+      }
+      .scarf-switcher__thumb:hover .scarf-switcher__thumb-frame {
+        transform: translateY(-2px);
+      }
+      .scarf-switcher__thumb:hover img {
+        transform: scale(1.04);
+      }
+      .scarf-switcher__thumb.active .scarf-switcher__thumb-frame {
         border-color: #111;
       }
-      .scarf-switcher__button:focus {
+      .scarf-switcher__thumb-label {
+        font-size: 0.85rem;
+        letter-spacing: 0.02em;
+        text-align: center;
+      }
+      .scarf-switcher__thumb.active .scarf-switcher__thumb-label {
+        font-weight: 600;
+      }
+      .scarf-switcher__thumb:focus {
+        outline: none;
+      }
+      .scarf-switcher__thumb:focus-visible .scarf-switcher__thumb-frame {
         outline: 2px solid #111;
         outline-offset: 3px;
+      }
+      @media (max-width: 540px) {
+        .scarf-switcher__thumb {
+          width: 96px;
+        }
+        .scarf-switcher__thumb-label {
+          font-size: 0.75rem;
+        }
+      }
+      .scarf-thumb-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .scarf-thumb-item {
+        position: relative;
+        margin: 0;
+        overflow: hidden;
+        border-radius: 2rem;
+      }
+      .scarf-thumb-item img {
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        display: block;
+      }
+      .scarf-thumb-item figcaption {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: 0.4rem;
+        padding: 1.25rem;
+        color: #fff;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.35) 45%, transparent 70%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+      }
+      .scarf-thumb-item:hover figcaption,
+      .scarf-thumb-item:focus-within figcaption {
+        opacity: 1;
+      }
+      .scarf-thumb-item__title {
+        font-family: Montserrat, Arial, sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .scarf-thumb-item__desc {
+        font-size: 0.85rem;
+        line-height: 1.45;
+        font-weight: 300;
+        opacity: 0.85;
+      }
+      @media (max-width: 540px) {
+        .scarf-thumb-grid {
+          gap: 0.5rem;
+        }
+        .scarf-thumb-item figcaption {
+          padding: 0.75rem;
+          gap: 0.25rem;
+        }
+        .scarf-thumb-item__title {
+          font-size: 0.7rem;
+        }
+        .scarf-thumb-item__desc {
+          font-size: 0.7rem;
+        }
       }
     </style>
     <script type="text/javascript">
@@ -91,9 +195,18 @@
                   <img src="images/scarf-orchid.webp" loading="lazy" alt="The Singapore Garden Collection — Orchid Reverie" class="scarf-switcher__image" data-index="2" />
                 </div>
                 <div class="scarf-switcher__controls">
-                  <button type="button" class="scarf-switcher__button active" data-index="0">Garden Lines</button>
-                  <button type="button" class="scarf-switcher__button" data-index="1">Neighbourhood Blooms</button>
-                  <button type="button" class="scarf-switcher__button" data-index="2">Orchid Reverie</button>
+                  <button type="button" class="scarf-switcher__thumb active" data-index="0" aria-label="Show Garden Lines">
+                    <span class="scarf-switcher__thumb-frame"><img src="images/scarf-thumb-garden.webp" loading="lazy" alt="Garden Lines thumbnail" /></span>
+                    <span class="scarf-switcher__thumb-label">Garden Lines</span>
+                  </button>
+                  <button type="button" class="scarf-switcher__thumb" data-index="1" aria-label="Show Neighbourhood Blooms">
+                    <span class="scarf-switcher__thumb-frame"><img src="images/scarf-thumb-neighbour.webp" loading="lazy" alt="Neighbourhood Blooms thumbnail" /></span>
+                    <span class="scarf-switcher__thumb-label">Neighbourhood Blooms</span>
+                  </button>
+                  <button type="button" class="scarf-switcher__thumb" data-index="2" aria-label="Show Orchid Reverie">
+                    <span class="scarf-switcher__thumb-frame"><img src="images/scarf-thumb-orchid.webp" loading="lazy" alt="Orchid Reverie thumbnail" /></span>
+                    <span class="scarf-switcher__thumb-label">Orchid Reverie</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -107,7 +220,7 @@
             <div class="max-width-regular">
               <div class="project__intro-content">
                 <div class="project__address">
-                  <div class="text-large">Prints &amp; Visual Merchandising Display</div>
+                  <div class="text-large">Textile Design</div>
                 </div>
                 <div class="project__title" style="position:relative;">
                   <h1 class="heading-huge">The Singapore Garden Collection</h1>
@@ -141,7 +254,7 @@
                   </div>
                   <div class="project__overview-item">
                     <h2 class="heading-small c3">Medium</h2>
-                    <div class="text-large">Prints &amp; Visual Merchandising Display</div>
+                    <div class="text-large">Textile Design</div>
                   </div>
                   <div class="project__overview-item">
                     <h2 class="heading-small c3">Location</h2>
@@ -159,6 +272,39 @@
         </section>
 
         <div class="spacer-regular"></div>
+
+        <section class="project__info">
+          <div class="container">
+            <div class="max-width-regular">
+              <div class="project__info-content">
+                <div class="scarf-thumb-grid">
+                  <figure class="scarf-thumb-item">
+                    <img src="images/scarf-thumb-garden.webp" loading="lazy" alt="Garden Lines scarf" class="project-image" />
+                    <figcaption>
+                      <span class="scarf-thumb-item__title">Garden Lines</span>
+                      <span class="scarf-thumb-item__desc">Lines trace the architecture in quiet rhythm, echoing the silhouettes of Gardens by the Bay. Subtle and composed, they shape a serene landscape — where structure meets stillness in a moment of calm.</span>
+                    </figcaption>
+                  </figure>
+                  <figure class="scarf-thumb-item">
+                    <img src="images/scarf-thumb-neighbour.webp" loading="lazy" alt="Neighbourhood Blooms scarf" class="project-image" />
+                    <figcaption>
+                      <span class="scarf-thumb-item__title">Neighbourhood Blooms</span>
+                      <span class="scarf-thumb-item__desc">Ixora shrubs tucked beneath the HDB blocks, frangipani blossoms drifting gently from roadside trees, and bougainvillea cascading across overhead bridges — a quiet, familiar beauty woven into the everyday walk through the neighbourhood.</span>
+                    </figcaption>
+                  </figure>
+                  <figure class="scarf-thumb-item">
+                    <img src="images/scarf-thumb-orchid.webp" loading="lazy" alt="Orchid Reverie scarf" class="project-image" />
+                    <figcaption>
+                      <span class="scarf-thumb-item__title">Orchid Reverie</span>
+                      <span class="scarf-thumb-item__desc">A graceful tribute to the orchid's elegant silhouette. Curved petals create a soft, balanced rhythm. Minimal details highlight form and quiet beauty — a timeless design that feels calm and refined.</span>
+                    </figcaption>
+                  </figure>
+                </div>
+                <img src="images/scarf-style.webp" loading="lazy" alt="The Singapore Garden Collection — scarf styling guide" class="project-image" />
+              </div>
+            </div>
+          </div>
+        </section>
 
         <div class="spacer-large"></div>
       </main>
@@ -201,27 +347,47 @@
       })();
 
       (function() {
-        var switcher = document.querySelector('.scarf-switcher');
-        if (!switcher) return;
-        var buttons = Array.prototype.slice.call(switcher.querySelectorAll('.scarf-switcher__button'));
-        var images = Array.prototype.slice.call(switcher.querySelectorAll('.scarf-switcher__image'));
-        function setActive(index) {
-          var target = Number(index);
-          buttons.forEach(function(button) {
-            var isActive = Number(button.dataset.index) === target;
-            button.classList.toggle('active', isActive);
-            button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        function initSwitcher() {
+          var switcher = document.querySelector('.scarf-switcher');
+          if (!switcher) return;
+          var thumbs = Array.prototype.slice.call(switcher.querySelectorAll('.scarf-switcher__thumb'));
+          var images = Array.prototype.slice.call(switcher.querySelectorAll('.scarf-switcher__image'));
+          if (!images.length) return;
+          var current = 0;
+          var timer = null;
+          var INTERVAL = 4000;
+          function setActive(index) {
+            current = ((Number(index) % images.length) + images.length) % images.length;
+            thumbs.forEach(function(thumb) {
+              var isActive = Number(thumb.dataset.index) === current;
+              thumb.classList.toggle('active', isActive);
+              thumb.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            });
+            images.forEach(function(image) {
+              image.classList.toggle('active', Number(image.dataset.index) === current);
+            });
+          }
+          function stopLoop() {
+            if (timer) { clearInterval(timer); timer = null; }
+          }
+          function startLoop() {
+            stopLoop();
+            timer = setInterval(function() { setActive(current + 1); }, INTERVAL);
+          }
+          thumbs.forEach(function(thumb) {
+            thumb.addEventListener('click', function() {
+              stopLoop();
+              setActive(thumb.dataset.index);
+            });
           });
-          images.forEach(function(image) {
-            image.classList.toggle('active', Number(image.dataset.index) === target);
-          });
+          setActive(0);
+          startLoop();
         }
-        buttons.forEach(function(button) {
-          button.addEventListener('click', function() {
-            setActive(button.dataset.index);
-          });
-        });
-        setActive(0);
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initSwitcher);
+        } else {
+          initSwitcher();
+        }
       })();
     </script>
 
