@@ -119,6 +119,50 @@
       @media (max-width: 900px) {
         .cool-annotation { display: none; }
       }
+
+      .cool-book-wrapper {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto 2rem auto;
+        aspect-ratio: 3 / 2;
+        position: relative;
+        overflow: hidden;
+      }
+      .cool-book {
+        width: 100%;
+        height: 100%;
+      }
+      .cool-book .cool-book-page {
+        background: #fff;
+        overflow: hidden;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.18);
+      }
+      .cool-book .cool-book-page img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        pointer-events: none;
+        user-select: none;
+      }
+      .cool-book-hint {
+        position: absolute;
+        bottom: 1.4rem;
+        right: 1.4rem;
+        font-family: Montserrat, Arial, sans-serif;
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #fff;
+        background: rgba(0,0,0,0.55);
+        padding: 0.55rem 0.95rem;
+        border-radius: 999px;
+        pointer-events: none;
+        transition: opacity 0.6s ease;
+        z-index: 4;
+      }
+      .cool-book-wrapper.has-interacted .cool-book-hint { opacity: 0; }
     </style>
     <script type="text/javascript">
       !(function (o, c) {
@@ -239,14 +283,25 @@
           </div>
         </section>
 
-        <div class="spacer-regular"></div>
+        <div class="spacer-large"></div>
+
 
         <section class="project__info">
           <div class="container">
             <div class="max-width-regular">
               <div class="project__info-content">
-                <img src="images/cool-grille.webp" loading="lazy" alt="Outdoor Cooling Unit — grille detail" class="project-image" />
-                <div class="spacer-regular"></div>
+                <div class="cool-book-wrapper" aria-label="Outdoor Cooling Unit — page-turn gallery">
+                  <div class="cool-book" id="cool-book">
+                    <div class="cool-book-page"><img src="images/cooling-2.webp" alt="Outdoor Cooling Unit — detail view 2" /></div>
+                    <div class="cool-book-page"><img src="images/cooling-1.webp" alt="Outdoor Cooling Unit — detail view 1" /></div>
+                    <div class="cool-book-page"><img src="images/cooling-2.webp" alt="Outdoor Cooling Unit — detail view 2" /></div>
+                    <div class="cool-book-page"><img src="images/cooling-1.webp" alt="Outdoor Cooling Unit — detail view 1" /></div>
+                  </div>
+                  <div class="cool-book-hint">Click to flip</div>
+                </div>
+                
+                <div class="spacer-large"></div>
+
                 <img src="images/cool-mood.webp" loading="lazy" alt="Outdoor Cooling Unit — environmental context" class="project-image" />
               </div>
             </div>
@@ -286,11 +341,72 @@
       </footer>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
     <script>
       (function() {
         document.querySelectorAll('.footer__nav-link[data-hover-img]').forEach(function(link) {
           link.style.setProperty('--hover-img', 'url("' + new URL(link.getAttribute('data-hover-img'), window.location.href).href + '")');
         });
+      })();
+
+      (function() {
+        var bookEl = document.getElementById('cool-book');
+        var wrapper = document.querySelector('.cool-book-wrapper');
+        if (!bookEl) return;
+        function init() {
+          if (typeof St === 'undefined' || !St.PageFlip) return;
+          var pageFlip = new St.PageFlip(bookEl, {
+            width: 900,
+            height: 600,
+            size: 'stretch',
+            minWidth: 700,
+            maxWidth: 1400,
+            minHeight: 467,
+            maxHeight: 933,
+            drawShadow: true,
+            flippingTime: 900,
+            usePortrait: true,
+            maxShadowOpacity: 0.5,
+            showCover: false,
+            mobileScrollSupport: false,
+            swipeDistance: 30
+          });
+          pageFlip.loadFromHTML(document.querySelectorAll('.cool-book-page'));
+
+          var resetting = false;
+          pageFlip.on('flip', function(e) {
+            if (wrapper) wrapper.classList.add('has-interacted');
+            if (resetting) { resetting = false; return; }
+            var total = pageFlip.getPageCount();
+            var current = (e && typeof e.data === 'number') ? e.data : pageFlip.getCurrentPageIndex();
+            if (current >= total - 1) {
+              resetting = true;
+              setTimeout(function() { pageFlip.turnToPage(1); }, 50);
+            } else if (current <= 0) {
+              resetting = true;
+              setTimeout(function() { pageFlip.turnToPage(total - 2); }, 50);
+            }
+          });
+
+          var dragging = false, downX = 0, downY = 0;
+          bookEl.addEventListener('pointerdown', function(e) {
+            dragging = false;
+            downX = e.clientX;
+            downY = e.clientY;
+          });
+          bookEl.addEventListener('pointermove', function(e) {
+            if (Math.abs(e.clientX - downX) > 6 || Math.abs(e.clientY - downY) > 6) dragging = true;
+          });
+          bookEl.addEventListener('click', function() {
+            if (dragging) return;
+            pageFlip.flipNext();
+          });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', init);
+        } else {
+          init();
+        }
       })();
 
       (function() {
